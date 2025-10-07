@@ -10,7 +10,7 @@ public:
 	{
 		WorldObject** worldObjects;
 		uint8_t objectAmount;
-		uint8_t sizeOf;
+		uint8_t size;
 	};
 	void addWorldObject( WorldObject* obj );
 	float temperature() const;

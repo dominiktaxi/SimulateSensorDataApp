@@ -4,8 +4,8 @@
 
 World::World() : _temperature(0.f), _humidity(0.f), _container { _worldObjects, 0, sizeof(_worldObjects)}
 {
-	uint8_t arraySize = sizeof( _worldObjects ) / sizeof( _worldObjects[ 0 ] );
-	for ( uint8_t i = 0; i < arraySize; i++ )
+	int arraySize = sizeof( _worldObjects ) / sizeof( _worldObjects[ 0 ] );
+	for ( int i = 0; i < arraySize; i++ )
 	{
 		_worldObjects[ i ] = nullptr;
 	}
@@ -29,7 +29,7 @@ void World::addWorldObject( WorldObject* obj )
 	}
 	else
 	{
-		delete obj;
+		delete obj;   //obj = nullptr is unnecessary as obj is a temporary variable that gets deleted out of scope
 		std::cout << "maximum number of objects reached" << std::endl;
 		return;
 	}

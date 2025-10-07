@@ -4,10 +4,9 @@
     from the outside, the other sensors sits inside and is the one that triggers the alarm. Everything is logged.
     The user will be in the role of a person that will have different options what to do in the simulated world.
     The user can choose to move towards the house, to step back, to break a window or break in through the door.
-    Using uint_8 when possible to reduce memory usage
+    
 */
 
-//TODO right now: Fix creating new objects
 
 #include <iostream>
 #include <windows.h>
@@ -18,20 +17,12 @@
 #include "Engine.h"
 #include "TemperatureSensor.h"
 #include "MotionDistanceSensor.h"
-
-enum OBJECTSETUP {PERSON, HOUSE, SENSOR, NONEE };
-enum DIRECTION { LEFT, RIGHT, UP, DOWN, NONE };
-DIRECTION direction;
-OBJECTSETUP objectSetup;
-const uint8_t mapWidth = 80;
-const uint8_t mapHeight = 30;
-uint8_t houseWidth = 20;
-uint8_t houseHeight = 10;
-Vector2D housePos( 0, 0 );
+#include "House.h"
 
 
 
-Vector2D setObjectPosition(Draw& draw, Engine::OBJECT_TYPE type)
+
+Vector2D setObjectPosition(Draw& draw, Engine::OBJECT_TYPE type, House* house)
 {
 	int dude = rand() % 100;
 	bool choosing = true;
@@ -42,20 +33,20 @@ Vector2D setObjectPosition(Draw& draw, Engine::OBJECT_TYPE type)
 		{
 			switch ( _getch() )
 			{
-				//system( "cls" );
+				system( "cls" );
 				case 'a': objectPos.setX( objectPos.x() - 1 ); break;
 				case 'w': objectPos.setY( objectPos.y() - 1 ); break;
 				case 's': objectPos.setY( objectPos.y() + 1 ); break;
 				case 'd': objectPos.setX( objectPos.x() + 1 ); break;
-				case 'm': choosing = false; break;
+				case ' ': choosing = false; break;
 			}
 		}
-		draw.draw( objectPos, type);
+		draw.draw( objectPos, type, house);
 	}
 	return objectPos;
 }
 
-void setup(Draw& draw, World* world)
+void setup(Draw& draw, World* world, House*& house)
 {
 	Engine::OBJECT_TYPE type = Engine::OBJECT_TYPE::NONE;
 	int choice;
@@ -85,7 +76,10 @@ void setup(Draw& draw, World* world)
 		break;
 	}
 
-	Vector2D pos = setObjectPosition(draw, type);
+
+	Vector2D pos = setObjectPosition(draw, type, house);
+
+
 	switch ( type )
 	{
 		case (Engine::OBJECT_TYPE::TEMPERATURE_SENSOR):
@@ -105,11 +99,33 @@ void setup(Draw& draw, World* world)
 		break;
 		case (Engine::OBJECT_TYPE::HOUSE):
 		{
+			std::cout << "Choose width and height (19 x 19 max)" << std::endl;
 
+			int width = 0;
+			int length = 0;
+
+			std::cin >> width;
+
+			std::cout << "Choose length" << std::endl;
+
+			std::cin.clear();
+			std::cin >> length;
+			if ( width < 20 && width > 0 && length < 20 && length > 0)
+			{
+				if ( house == nullptr )
+				{
+					house = new House( pos, Vector2D( width, length ) );
+					std::cout << "HOUSE PLACED" << std::endl;
+				}
+				else
+				{
+					std::cout << "HOUSE ALREADY PLACED" << std::endl;
+				}
+			}
+			
 		}
 		break;
 	}
-	
 }
 
 
@@ -117,15 +133,12 @@ int main()
 {
 	World world;
 	Draw draw( &world );
+	House* house = nullptr;
+
 	while ( true )
 	{
-		setup( draw, &world );
+		setup( draw, &world, house );
 	}
-
-
-
-
-	
 
     return 0;
 }

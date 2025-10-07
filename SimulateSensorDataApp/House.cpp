@@ -1,34 +1,43 @@
 #include "House.h"
+#include <iostream>
 
-
-
-House::House( const Vector2D& position, const Vector2D& widthLength ) : WorldObject(position.x(), position.y()), _widthLength( widthLength ),
-_type(WorldObject::TYPE::HOUSE)
+//container is a struct for being able to pass a decayed array (arrays decays to pointers) and still be able to keep the possibility to check size
+House::House( const Vector2D& position, const Vector2D& widthLength ) : _widthLength( widthLength ),
+_type( WorldObject::TYPE::HOUSE ), _container { 0, _positions, sizeof(_positions)}, _position(position)
 {
-	for ( int i = 0; i < _maxPositions; i++ )
+	//set positions for upper wall
+	for ( int x = 0; x < widthLength.width(); x++ )
 	{
-		_positions[i] = Vector2D(2, 2);
+		_positions[ _container.numberOfVectors ] = Vector2D( x + _position.x(), _position.y() );
+		_container.numberOfVectors++;
+		std::cout << "++" << std::endl;
 	}
-	for ( uint8_t y = position.y(); y < widthLength.y(); y++ )
+
+	for ( int x = 0; x < widthLength.width(); x++ )
 	{
-		for ( uint8_t x = position.x(); x < widthLength.x(); x++ )
-		{
-
-		}
+		_positions[ _container.numberOfVectors ] = Vector2D( x + _position.x(), _position.y() + _widthLength.length() + 1 );
+		_container.numberOfVectors++;
+		std::cout << "++" << std::endl;
 	}
+
+	for ( int y = 0; y < widthLength.length(); y++ )
+	{
+		_positions[ _container.numberOfVectors ] = Vector2D( _position.x(), _position.y() + y + 1 );
+		_container.numberOfVectors++;
+		_positions[ _container.numberOfVectors ] = Vector2D( _position.x() + _widthLength.width(), position.y() + y + 1);
+		_container.numberOfVectors++;
+		std::cout << "++" << std::endl;
+	}
+	std::cout << "Counter: " << _container.numberOfVectors << std::endl;
 }
 
-WorldObject::TYPE House::type() const
-{
-	return _type;
-}
-
-const Vector2D& House::position() const
-{
-	return _position;
-}
 
 const Vector2D& House::widthLength() const
 {
 	return _widthLength;
+}
+
+const House::ObjectContainer& House::positionsContainer() const
+{
+	return _container;
 }

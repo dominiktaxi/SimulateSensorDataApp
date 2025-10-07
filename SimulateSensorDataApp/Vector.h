@@ -4,15 +4,18 @@ class Vector2D
 {
 public:
 	Vector2D( int x, int y );
+	Vector2D();
 	Vector2D operator+( const Vector2D& other) const;
 	Vector2D operator-( const Vector2D& other ) const;
 	bool operator==( const Vector2D& other ) const;
-	uint8_t x() const;
-	uint8_t y() const;
-	void setX(uint8_t x);
-	void setY(uint8_t y);
+	int x() const;
+	int y() const;
+	int width() const;
+	int length() const;
+	void setX(int x);
+	void setY(int y);
 private:
-	uint8_t _x;
-	uint8_t _y;
+	int _x;
+	int _y;
 };
 
