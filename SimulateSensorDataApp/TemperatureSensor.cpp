@@ -1,7 +1,7 @@
 #include "TemperatureSensor.h"
 
 TemperatureSensor::TemperatureSensor(uint8_t posX, uint8_t posY) : WorldObject( posX, posY ), _temperature(20.f), 
-_type(WorldObject::TYPE::TEMPERATURE_SENSOR){}
+_type(WorldObject::TYPE::TEMPERATURE_SENSOR), _name("temperatureSensor"){}
 
 const Vector2D& TemperatureSensor::position() const
 {

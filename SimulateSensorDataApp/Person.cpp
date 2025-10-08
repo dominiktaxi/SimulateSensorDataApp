@@ -1,6 +1,6 @@
 #include "Person.h"
 
-Person::Person ( uint8_t x, uint8_t y ) : WorldObject(x, y), _type(WorldObject::TYPE::PERSON) {}
+Person::Person ( uint8_t x, uint8_t y ) : WorldObject(x, y), _type(WorldObject::TYPE::PERSON), _name("person") {}
 
 void Person::move()
 {

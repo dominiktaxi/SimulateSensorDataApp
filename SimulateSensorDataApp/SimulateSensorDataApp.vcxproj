@@ -127,10 +127,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DistanceSensor.cpp" />
     <ClCompile Include="Draw.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="House.cpp" />
-    <ClCompile Include="MotionDistanceSensor.cpp" />
+    <ClCompile Include="MotionSensor.cpp" />
     <ClCompile Include="Person.cpp" />
     <ClCompile Include="TemperatureSensor.cpp" />
     <ClCompile Include="main.cpp" />
@@ -141,10 +142,11 @@
     <ClCompile Include="WorldObserver.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DistanceSensor.h" />
     <ClInclude Include="Draw.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="House.h" />
-    <ClInclude Include="MotionDistanceSensor.h" />
+    <ClInclude Include="MotionSensor.h" />
     <ClInclude Include="Person.h" />
     <ClInclude Include="TemperatureSensor.h" />
     <ClInclude Include="Utils.h" />

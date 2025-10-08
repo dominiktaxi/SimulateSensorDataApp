@@ -1,5 +1,6 @@
 #pragma once
 #include "WorldObject.h"
+#include "House.h"
 
 class World
 {
@@ -22,5 +23,6 @@ private:
 	WorldObject* _worldObjects[_maxObjects];
 	float _temperature;
 	float _humidity;
+	House _house;
 };
 

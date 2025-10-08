@@ -10,5 +10,6 @@ public:
 	WorldObject::TYPE type() const override;
 private:
 	WorldObject::TYPE _type;
+	const char* _name;
 };
 

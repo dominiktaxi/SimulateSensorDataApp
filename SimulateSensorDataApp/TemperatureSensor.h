@@ -10,5 +10,6 @@ public:
 private:
 	int8_t _temperature;
 	WorldObject::TYPE _type;
+	const char* _name;
 };
 

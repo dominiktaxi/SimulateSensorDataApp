@@ -33,7 +33,7 @@
     <ClCompile Include="TemperatureSensor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MotionDistanceSensor.cpp">
+    <ClCompile Include="MotionSensor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="World.cpp">
@@ -49,6 +49,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Engine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DistanceSensor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -68,7 +71,7 @@
     <ClInclude Include="TemperatureSensor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MotionDistanceSensor.h">
+    <ClInclude Include="MotionSensor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="World.h">
@@ -84,6 +87,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Engine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DistanceSensor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

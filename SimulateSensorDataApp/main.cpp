@@ -7,6 +7,8 @@
     
 */
 
+//Lukas: sätt house i world
+
 
 #include <iostream>
 #include <windows.h>
@@ -89,7 +91,7 @@ void setup(Draw& draw, World* world, House*& house)
 		break;
 		case Engine::OBJECT_TYPE::MOTION_SENSOR:
 		{
-			world->addWorldObject( new MotionDistanceSensor( pos.x(), pos.y() ) );
+			world->addWorldObject( new MotionSensor( pos.x(), pos.y() ) );
 		}
 		break;
 		case (Engine::OBJECT_TYPE::PERSON):
