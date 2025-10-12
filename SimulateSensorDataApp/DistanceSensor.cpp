@@ -18,14 +18,13 @@ const Vector2D& DistanceSensor::position() const
 
 
 
-void DistanceSensor::runTick(Person* person)
+void DistanceSensor::runTick(Person* person, StoreData& storeData)
 {
-	if ( isInRange( person->position() ) )
+	if ( isInRange( person ) )
 	{
 		_distance = ::euclideanDistance( this->position(), person->position() );
 	}
 }
-
 
 
 float DistanceSensor::data() const
@@ -33,12 +32,13 @@ float DistanceSensor::data() const
 	return _distance;
 }
 
-bool DistanceSensor::isInRange( const Vector2D& pos ) const/////PRIVATE/////
-{
-	return ::euclideanDistance( this->position(), pos) <= _range;
-}
-
 void DistanceSensor::storeData( StoreData& storeData ) const
 {
 	storeData.store( this );
 }
+
+bool DistanceSensor::isInRange( Person* person ) const/////PRIVATE/////
+{
+	return ::euclideanDistance( this->position(), person->position()) <= _range;
+}
+

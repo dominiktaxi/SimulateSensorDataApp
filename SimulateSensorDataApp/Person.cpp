@@ -17,7 +17,7 @@ WorldObject::TYPE Person::type() const
 	return _type;
 }
 
-void Person::runTick( Person* )
+void Person::runTick( Person*, StoreData& storeData )
 {
 
 }

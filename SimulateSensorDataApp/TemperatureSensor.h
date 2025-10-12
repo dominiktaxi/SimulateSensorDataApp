@@ -8,7 +8,7 @@ public:
 	void sensor();
 	WorldObject::TYPE type() const override;
 	int range() const override;
-	void runTick(Person*) override;
+	void runTick(Person*, StoreData&) override;
 	void storeData( StoreData& ) const override;
 	float data() const override;
 private:

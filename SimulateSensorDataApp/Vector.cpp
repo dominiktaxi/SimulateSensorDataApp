@@ -19,6 +19,11 @@ bool Vector2D::operator==( const Vector2D& other ) const
 	return ( _x == other._x && _y == other._y );
 }
 
+bool Vector2D::operator!=( const Vector2D& other ) const
+{
+	return ( _x != other._x || _y != other._y );
+}
+
 int Vector2D::x() const
 {
 	return _x;

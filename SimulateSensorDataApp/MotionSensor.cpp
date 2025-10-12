@@ -2,9 +2,10 @@
 #include <iostream>
 #include "utils.h"
 #include "StoreData.h"
+#include "Person.h"
 
-MotionSensor::MotionSensor(const Vector2D& pos) : WorldObject( pos ), 
-_type(WorldObject::TYPE::MOTION_SENSOR), _range(6), _previousPos(0, 0), _readPreviousPos(false) {}
+MotionSensor::MotionSensor(const Vector2D& pos) : WorldObject( pos ), _elementCounter(0),
+_type(WorldObject::TYPE::MOTION_SENSOR), _range(6) {}
 
 const Vector2D& MotionSensor::position() const
 {
@@ -17,9 +18,20 @@ WorldObject::TYPE MotionSensor::type() const
 }
 
 
-void MotionSensor::runTick(Person* person)
+void MotionSensor::runTick(Person* person, StoreData& storeData)
 {
+	if ( isInRange( person ) )
+	{
+		_positions[ _elementCounter ] = person->position();
+		_elementCounter++;
 
+		if ( _elementCounter > 1 ) { _elementCounter = 0; }
+		
+		if ( detectedMovement() )
+		{
+			storeData.store( this );
+		}
+	}
 }
 
 
@@ -34,18 +46,19 @@ float MotionSensor::data() const
 	return -1.f;
 }
 
-bool MotionSensor::detectedMovement( const Vector2D& pos )
+bool MotionSensor::detectedMovement()
 {
-	if ( !_readPreviousPos )
-	{
-		_previousPos = pos;
-		_readPreviousPos = true;
-	}
-	float temp = ::euclideanDistance( this->position(), pos );
-	return ::euclideanDistance( this->position(), pos ) <= _range;
+	return _positions[ 0 ] != _positions[ 1 ];
 }
 
 void MotionSensor::storeData( StoreData& storeData ) const
 {
 	storeData.store( this );
+}
+
+bool MotionSensor::isInRange( Person* person )
+{
+	auto position = person->position();
+	auto distance = ::euclideanDistance( position, this->position() );
+	return distance <= _range;
 }

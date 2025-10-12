@@ -21,7 +21,7 @@ public:
 	Person* person() const;
 	void addObject( WorldObject* );
 	const std::vector<WorldObject*>& worldObjects() const;
-	bool personInRange();
+	bool personInRange(WorldObject*);
 	void storeData();
 private:
 	std::vector<WorldObject*> _worldObjects;

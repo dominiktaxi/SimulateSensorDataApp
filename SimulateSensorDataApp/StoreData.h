@@ -18,7 +18,8 @@ public:
 	};
 	struct DataFromMovementSensor
 	{
-		bool movement;
+		bool detectedMovement;
+		double timeStamp;
 		const char* name;
 	};
 	void store( const WorldObject* );

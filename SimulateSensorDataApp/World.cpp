@@ -21,6 +21,10 @@ World::~World()
 
 void World::runTick()
 {
+	for ( auto obj : _worldObjects )
+	{
+		obj->runTick(_person, _storeData);
+	}
 	_ticks++;
 
 }
@@ -71,18 +75,19 @@ const std::vector<WorldObject*>& World::worldObjects() const
 	return _worldObjects;
 }
 
-bool World::personInRange()
+bool World::personInRange( WorldObject* object )
 {
-	for ( int i = 0; i < _worldObjects.size(); i++ )
-	{
-		return ::euclideanDistance( _person->position(), _worldObjects[ i ]->position() ) <= _worldObjects[ i ]->range();
-	}
+	auto position = object->position();
+	auto euclideanDistance = ::euclideanDistance( _person->position(), position );
+	auto range = object->range();
+
+	return euclideanDistance <= range;
 }
 
 void World::storeData()
 {
-	for ( int i = 0; i < _worldObjects.size(); i++ )
+	/*for ( int i = 0; i < _worldObjects.size(); i++ )
 	{
-		_worldObjects[ i ]->storeData(_storeData);
-	}
+		_worldObjects[ i ]->storeData( _storeData );
+	}*/
 }

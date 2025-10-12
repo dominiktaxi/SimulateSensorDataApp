@@ -8,6 +8,7 @@ public:
 	Vector2D operator+( const Vector2D& other) const;
 	Vector2D operator-( const Vector2D& other ) const;
 	bool operator==( const Vector2D& other ) const;
+	bool operator!=( const Vector2D& other ) const;
 	int x() const;
 	int y() const;
 	int width() const;

@@ -24,7 +24,7 @@ int TemperatureSensor::range() const
 	return -1; //useless method
 }
 
-void TemperatureSensor::runTick( Person* person )
+void TemperatureSensor::runTick( Person* person, StoreData& storeData )
 {
 
 }

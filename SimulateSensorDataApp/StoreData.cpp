@@ -8,27 +8,26 @@ StoreData::StoreData() : _start( std::chrono::steady_clock::now() )
 	
 }
 
-void StoreData::store( const WorldObject* object )
+void StoreData::store( const WorldObject* sensor )
 {
-	WorldObject::TYPE type = object->type();
+	WorldObject::TYPE type = sensor->type();
 	if ( type == WorldObject::TYPE::TEMPERATURE_SENSOR )
 	{
 		auto now = std::chrono::steady_clock::now();
 		std::chrono::duration<double> elapsed = now - _start;
-		_temperatures.push_back( { object->data(), elapsed.count(), "Temperature" } );
+		_temperatures.push_back( { sensor->data(), elapsed.count(), "Temperature" } );
 	}
 	else if ( type == WorldObject::TYPE::DISTANCE_SENSOR )
 	{
 		auto now = std::chrono::steady_clock::now();
 		std::chrono::duration<double> elapsed = now - _start;
-		_distances.push_back( { object->data(), elapsed.count(), "Distance"});
+		_distances.push_back( { sensor->data(), elapsed.count(), "Distance"});
 	}
 	else if ( type == WorldObject::TYPE::MOTION_SENSOR )
 	{
-
-	}
-	else if ( type == WorldObject::TYPE::PERSON )
-	{
-		_personPositions.push_back( object->position() );
+		bool detectedMovement = true;
+		auto now = std::chrono::steady_clock::now();
+		std::chrono::duration<double> elapsed = now - _start;
+		_movements.push_back( { detectedMovement, elapsed.count(), "Motion" } );
 	}
 }
