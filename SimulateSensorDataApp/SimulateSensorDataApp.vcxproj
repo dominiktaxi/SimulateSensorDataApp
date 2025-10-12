@@ -133,6 +133,7 @@
     <ClCompile Include="House.cpp" />
     <ClCompile Include="MotionSensor.cpp" />
     <ClCompile Include="Person.cpp" />
+    <ClCompile Include="StoreData.cpp" />
     <ClCompile Include="TemperatureSensor.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Utils.cpp" />
@@ -148,6 +149,7 @@
     <ClInclude Include="House.h" />
     <ClInclude Include="MotionSensor.h" />
     <ClInclude Include="Person.h" />
+    <ClInclude Include="StoreData.h" />
     <ClInclude Include="TemperatureSensor.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Vector.h" />

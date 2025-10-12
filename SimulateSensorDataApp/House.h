@@ -1,5 +1,5 @@
 #pragma once
-
+#include <vector>
 #include "Vector.h"
 #include "WorldObject.h"
 class House
@@ -7,7 +7,7 @@ class House
 public:
 	House( const Vector2D& position, const Vector2D& widthHeight );
 	
-	struct ObjectContainer
+	struct Array
 	{
 		int numberOfVectors;
 		Vector2D* positions;
@@ -15,13 +15,13 @@ public:
 	};
 
 	const Vector2D& widthLength() const;
-	const ObjectContainer& positionsContainer() const;
+	const Array& positionsContainer() const;
 private:
 	Vector2D _widthLength;
 	Vector2D _position;
-	static const uint8_t _maxPositions = 60;
+	static const uint8_t _maxPositions = 100;
 	Vector2D _positions[ _maxPositions ];
-	ObjectContainer _container;
+	Array _container;
 	WorldObject::TYPE _type;
 };
 

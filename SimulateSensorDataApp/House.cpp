@@ -10,14 +10,13 @@ _type( WorldObject::TYPE::HOUSE ), _container { 0, _positions, sizeof(_positions
 	{
 		_positions[ _container.numberOfVectors ] = Vector2D( x + _position.x(), _position.y() );
 		_container.numberOfVectors++;
-		std::cout << "++" << std::endl;
+		
 	}
 
 	for ( int x = 0; x < widthLength.width(); x++ )
 	{
 		_positions[ _container.numberOfVectors ] = Vector2D( x + _position.x(), _position.y() + _widthLength.length() + 1 );
 		_container.numberOfVectors++;
-		std::cout << "++" << std::endl;
 	}
 
 	for ( int y = 0; y < widthLength.length(); y++ )
@@ -26,7 +25,6 @@ _type( WorldObject::TYPE::HOUSE ), _container { 0, _positions, sizeof(_positions
 		_container.numberOfVectors++;
 		_positions[ _container.numberOfVectors ] = Vector2D( _position.x() + _widthLength.width(), position.y() + y + 1);
 		_container.numberOfVectors++;
-		std::cout << "++" << std::endl;
 	}
 	std::cout << "Counter: " << _container.numberOfVectors << std::endl;
 }
@@ -37,7 +35,7 @@ const Vector2D& House::widthLength() const
 	return _widthLength;
 }
 
-const House::ObjectContainer& House::positionsContainer() const
+const House::Array& House::positionsContainer() const
 {
 	return _container;
 }

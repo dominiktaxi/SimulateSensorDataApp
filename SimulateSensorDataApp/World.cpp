@@ -1,39 +1,30 @@
 #include "World.h"
 #include <iostream>
+#include "Person.h"
+#include "StoreData.h"
+#include "Vector.h"
+#include "Utils.h"
 
-
-World::World() : _temperature(0.f), _humidity(0.f), _container { _worldObjects, 0, sizeof(_worldObjects)}
+World::World() : _temperature(0.f), _humidity(0.f), _person(nullptr), _ticks(0), _storeData()
 {
-	int arraySize = sizeof( _worldObjects ) / sizeof( _worldObjects[ 0 ] );
-	for ( int i = 0; i < arraySize; i++ )
-	{
-		_worldObjects[ i ] = nullptr;
-	}
+	
 }
 World::~World()
 {
-	for ( int i = 0; i < _container.objectAmount; i++ )
+	for ( int i = 0; i < _worldObjects.size(); i++ )
 	{
 		delete _worldObjects[ i ];
 		_worldObjects[ i ] = nullptr;
-		_container.objectAmount = 0;
+		_worldObjects.clear();
 	}
 }
 
-void World::addWorldObject( WorldObject* obj )
+void World::runTick()
 {
-	if ( _container.objectAmount < _maxObjects )
-	{
-		_worldObjects[ _container.objectAmount ] = obj;
-		_container.objectAmount++;
-	}
-	else
-	{
-		delete obj;   //obj = nullptr is unnecessary as obj is a temporary variable that gets deleted out of scope
-		std::cout << "maximum number of objects reached" << std::endl;
-		return;
-	}
+	_ticks++;
+
 }
+
 
 float World::temperature() const
 {
@@ -45,7 +36,53 @@ float World::humidity() const
 	return _humidity;
 }
 
-const World::ObjectContainer& World::worldObjects() const
+
+
+
+Person* World::createPerson( const Vector2D& pos )
 {
-	return _container;
+	if ( _person == nullptr )
+	{
+		auto person = new Person( pos );
+		_person = person;
+		return person;
+	}
+	else
+	{
+		std::cout << "Person already created, nullptr returned" << std::endl;
+		return nullptr;
+	}
+}
+
+
+
+Person* World::person() const
+{
+	return _person;
+}
+
+void World::addObject(WorldObject* object)
+{
+	_worldObjects.push_back( object );
+}
+
+const std::vector<WorldObject*>& World::worldObjects() const
+{
+	return _worldObjects;
+}
+
+bool World::personInRange()
+{
+	for ( int i = 0; i < _worldObjects.size(); i++ )
+	{
+		return ::euclideanDistance( _person->position(), _worldObjects[ i ]->position() ) <= _worldObjects[ i ]->range();
+	}
+}
+
+void World::storeData()
+{
+	for ( int i = 0; i < _worldObjects.size(); i++ )
+	{
+		_worldObjects[ i ]->storeData(_storeData);
+	}
 }

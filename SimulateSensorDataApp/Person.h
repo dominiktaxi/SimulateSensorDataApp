@@ -4,12 +4,15 @@
 class Person : public WorldObject
 {
 public:
-	Person( uint8_t x, uint8_t y );
+	Person( const Vector2D& );
 	void move();
 	const Vector2D& position() const override;
 	WorldObject::TYPE type() const override;
+	void runTick(Person*) override;
+	int range() const override;
+	float data() const override;
+	void storeData( StoreData& ) const override;
 private:
 	WorldObject::TYPE _type;
-	const char* _name;
 };
 

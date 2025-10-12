@@ -1,7 +1,7 @@
 #include "Draw.h"
 #include "Vector.h"
 #include "House.h"
-
+#include "WorldObject.h"
 #include <iostream>
 
 Draw::Draw(World* world) : _world(world) {}
@@ -9,8 +9,8 @@ Draw::Draw(World* world) : _world(world) {}
 void Draw::draw(const Vector2D& pos, Engine::OBJECT_TYPE type, House* house) const
 {
 	bool drawEmptySpace = true;
-	int numberOfObjects = _world->worldObjects().objectAmount;
-	WorldObject** _worldObjects = _world->worldObjects().worldObjects;
+	int numberOfObjects = _world->worldObjects().size();
+	std::vector<WorldObject*> _worldObjects = _world->worldObjects();
 	system( "cls" );
 	for ( int y = 0; y < 30; y++ )
 	{
@@ -32,7 +32,7 @@ void Draw::draw(const Vector2D& pos, Engine::OBJECT_TYPE type, House* house) con
 			{
 				if ( _worldObjects[ i ]->position() == Vector2D( x, y ) )
 				{
-					if ( _worldObjects[ i ]->type() == WorldObject::TYPE::MOTION_DISTANCE_SENSOR ) 
+					if ( _worldObjects[ i ]->type() == WorldObject::TYPE::MOTION_SENSOR ) 
 						{ std::cout << "M"; continue; 
 							drawEmptySpace = false; 
 						}

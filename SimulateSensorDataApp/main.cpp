@@ -1,9 +1,5 @@
 /*
-        README
-    This program will simulate 2 motion sensors, one glass break detector and an alarm in a house. One of the sensors is just outside the door, monitoring movement and distance
-    from the outside, the other sensors sits inside and is the one that triggers the alarm. Everything is logged.
-    The user will be in the role of a person that will have different options what to do in the simulated world.
-    The user can choose to move towards the house, to step back, to break a window or break in through the door.
+
     
 */
 
@@ -21,8 +17,10 @@
 #include "MotionSensor.h"
 #include "House.h"
 
-
-
+// Header example
+namespace ObjectPosition {
+	Vector2D setObjectPosition( Draw&, Engine::OBJECT_TYPE, House* );
+}
 
 Vector2D setObjectPosition( Draw& draw, Engine::OBJECT_TYPE type, House* house )
 {
@@ -50,87 +48,94 @@ Vector2D setObjectPosition( Draw& draw, Engine::OBJECT_TYPE type, House* house )
 		return objectPos;
 	}
 
-	void setup( Draw & draw, World * world, House * &house )
+void setup( Draw & draw, World * world, House * &house )
+{
+	Engine::OBJECT_TYPE type = Engine::OBJECT_TYPE::NONE;
+	int choice;
+	std::cout << "Choose what to place:\n1.Temperature Sensor\n2.Motion Sensor\n3.Person\n4.House\n5.Distance Sensor " << std::endl;
+	std::cin >> choice;
+	switch ( choice )
 	{
-		Engine::OBJECT_TYPE type = Engine::OBJECT_TYPE::NONE;
-		int choice;
-		std::cout << "Choose what to place:\n1.Temperature Sensor\n2.Motion Sensor\n3.Person\n4.House " << std::endl;
-		std::cin >> choice;
-		switch ( choice )
+		case 1:
 		{
-			case 1:
-			{
-				type = Engine::OBJECT_TYPE::TEMPERATURE_SENSOR;
-			}
-			break;
-			case 2:
-			{
-				type = Engine::OBJECT_TYPE::MOTION_SENSOR;
-			}
-			break;
-			case 3:
-			{
-				type = Engine::OBJECT_TYPE::PERSON;
-			}
-			break;
-			case 4:
-			{
-				type = Engine::OBJECT_TYPE::HOUSE;
-			}
-			break;
+			type = Engine::OBJECT_TYPE::TEMPERATURE_SENSOR;
 		}
-
-
-		Vector2D pos = setObjectPosition( draw, type, house );
-
-
-		switch ( type )
+		break;
+		case 2:
 		{
-			case ( Engine::OBJECT_TYPE::TEMPERATURE_SENSOR ):
-			{
-				world->addWorldObject( new TemperatureSensor( pos.x(), pos.y() ) );
-			}
-			break;
-			case Engine::OBJECT_TYPE::MOTION_SENSOR:
-			{
-				world->addWorldObject( new MotionSensor( pos.x(), pos.y() ) );
-			}
-			break;
-			case ( Engine::OBJECT_TYPE::PERSON ):
-			{
-				world->addWorldObject( new Person( pos.x(), pos.y() ) );
-			}
-			break;
-			case ( Engine::OBJECT_TYPE::HOUSE ):
-			{
-				std::cout << "Choose width and height (19 x 19 max)" << std::endl;
+			type = Engine::OBJECT_TYPE::MOTION_SENSOR;
+		}
+		break;
+		case 3:
+		{
+			type = Engine::OBJECT_TYPE::PERSON;
+		}
+		break;
+		case 4:
+		{
+			type = Engine::OBJECT_TYPE::HOUSE;
+		}
+		break;
+		case 5:
+		{
+			type = Engine::OBJECT_TYPE::DISTANCE_SENSOR;
+		}
+		break;
+	}
 
-				int width = 0;
-				int length = 0;
 
-				std::cin >> width;
+	Vector2D pos = setObjectPosition( draw, type, house );
 
-				std::cout << "Choose length" << std::endl;
 
-				std::cin.clear();
-				std::cin >> length;
-				if ( width < 20 && width > 0 && length < 20 && length > 0 )
+	switch ( type )
+	{
+		case ( Engine::OBJECT_TYPE::TEMPERATURE_SENSOR ):
+		{
+			world->addObject( new TemperatureSensor( pos ) );
+		}
+		break;
+		case Engine::OBJECT_TYPE::MOTION_SENSOR:
+		{
+			auto object = new MotionSensor( pos );
+			world->addObject( object );
+		}
+		break;
+		case ( Engine::OBJECT_TYPE::PERSON ):
+		{
+			auto object = new Person( pos );
+			world->addObject( object );
+		}
+		break;
+		case ( Engine::OBJECT_TYPE::HOUSE ):
+		{
+			std::cout << "Choose width and height (19 x 19 max)" << std::endl;
+
+			int width = 0;
+			int length = 0;
+
+			std::cin >> width;
+
+			std::cout << "Choose length" << std::endl;
+
+			std::cin.clear();
+			std::cin >> length;
+			if ( width < 20 && width > 0 && length < 20 && length > 0 )
+			{
+				if ( house == nullptr )
 				{
-					if ( house == nullptr )
-					{
-						house = new House( pos, Vector2D( width, length ) );
-						std::cout << "HOUSE PLACED" << std::endl;
-					}
-					else
-					{
-						std::cout << "HOUSE ALREADY PLACED" << std::endl;
-					}
+					house = new House( pos, Vector2D( width, length ) );
+					std::cout << "HOUSE PLACED" << std::endl;
 				}
-
+				else
+				{
+					std::cout << "HOUSE ALREADY PLACED" << std::endl;
+				}
 			}
-			break;
+
 		}
-	
+		break;
+	}
+
 }
 
 
@@ -144,6 +149,11 @@ int main()
 	{
 		setup( draw, &world, house );
 	}
+
+
+	// house->setup()
+	// world->draw()
+	// world->append(&house)
 
     return 0;
 }

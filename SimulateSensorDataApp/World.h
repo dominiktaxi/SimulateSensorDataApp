@@ -1,28 +1,34 @@
 #pragma once
-#include "WorldObject.h"
-#include "House.h"
+
+#include "StoreData.h"
+#include <map>
+#include <vector>
+class Person;
+class StoreData;
+class WorldObject;
+class Vector2D;
 
 class World
 {
 public:
 	World();
 	~World();
-	struct ObjectContainer
-	{
-		WorldObject** worldObjects;
-		uint8_t objectAmount;
-		uint8_t size;
-	};
-	void addWorldObject( WorldObject* obj );
+	
+	void runTick();
 	float temperature() const;
 	float humidity() const;
-	const ObjectContainer& worldObjects() const;
+	Person* createPerson( const Vector2D& );
+	Person* person() const;
+	void addObject( WorldObject* );
+	const std::vector<WorldObject*>& worldObjects() const;
+	bool personInRange();
+	void storeData();
 private:
-	ObjectContainer _container;
-	static const uint8_t _maxObjects = 10;
-	WorldObject* _worldObjects[_maxObjects];
+	std::vector<WorldObject*> _worldObjects;
+	Person* _person;
+	StoreData _storeData;
 	float _temperature;
 	float _humidity;
-	House _house;
+	unsigned int _ticks;
 };
 
