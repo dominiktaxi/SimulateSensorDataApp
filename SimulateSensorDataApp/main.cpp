@@ -1,14 +1,6 @@
-/*
-
-    
-*/
-
-//Lukas: sätt house i world
-
 
 #include <iostream>
 #include <windows.h>
-//#include <stdio.h>
 #include <conio.h>
 #include "Person.h"
 #include "draw.h"
@@ -16,126 +8,124 @@
 #include "TemperatureSensor.h"
 #include "MotionSensor.h"
 #include "House.h"
+#include "DistanceSensor.h"
 
-// Header example
-namespace ObjectPosition {
-	Vector2D setObjectPosition( Draw&, Engine::OBJECT_TYPE, House* );
-}
 
 Vector2D setObjectPosition( Draw& draw, Engine::OBJECT_TYPE type, House* house )
 {
+	int dude = rand() % 100;
+	bool placing = true;
+	Vector2D objectPos( 0, 0 );
 	
-		int dude = rand() % 100;
-		bool choosing = true;
-		Vector2D objectPos( 0, 0 );
 
-		while ( choosing )
+	while ( placing )
+	{
+		//if ( _kbhit() )
 		{
-			//if ( _kbhit() )
-			{
-				switch ( _getch() )
-				{
-					system( "cls" );
-					case 'a': objectPos.setX( objectPos.x() - 1 ); break;
-					case 'w': objectPos.setY( objectPos.y() - 1 ); break;
-					case 's': objectPos.setY( objectPos.y() + 1 ); break;
-					case 'd': objectPos.setX( objectPos.x() + 1 ); break;
-					case ' ': choosing = false; break;
-				}
-			}
 			draw.draw( objectPos, type, house );
+			if ( static_cast<int>( type ) == 0 ) { std::cout << "\nPLACE TEMPERATURE SENSOR" << std::endl; }
+			if ( static_cast<int>( type ) == 1 ) { std::cout << "\nPLACE MOTION SENSOR" << std::endl; }
+			if ( static_cast<int>( type ) == 2 ) { std::cout << "\nPLACE DISTANCE SENSOR" << std::endl; }
+			if ( static_cast<int>( type ) == 3 ) { std::cout << "\nPLACE PERSON" << std::endl; }
+			
+			std::cout << "A-LEFT	D-RIGHT		W-UP	S-DOWN		SPACE-DONE" << std::endl;
+			switch ( _getch() )
+			{
+				system( "cls" );
+				case 'a': objectPos.setX( objectPos.x() - 1 ); break;
+				case 'w': objectPos.setY( objectPos.y() - 1 ); break;
+				case 's': objectPos.setY( objectPos.y() + 1 ); break;
+				case 'd': objectPos.setX( objectPos.x() + 1 ); break;
+				case ' ': placing = false; break;
+			}
 		}
-		return objectPos;
+		
+		
+	}
+	return objectPos;
 	}
 
 void setup( Draw & draw, World * world, House * &house )
 {
 	Engine::OBJECT_TYPE type = Engine::OBJECT_TYPE::NONE;
-	int choice;
-	std::cout << "Choose what to place:\n1.Temperature Sensor\n2.Motion Sensor\n3.Person\n4.House\n5.Distance Sensor " << std::endl;
-	std::cin >> choice;
-	switch ( choice )
+	
+	
+	struct Positions
 	{
-		case 1:
-		{
-			type = Engine::OBJECT_TYPE::TEMPERATURE_SENSOR;
-		}
-		break;
-		case 2:
-		{
-			type = Engine::OBJECT_TYPE::MOTION_SENSOR;
-		}
-		break;
-		case 3:
-		{
-			type = Engine::OBJECT_TYPE::PERSON;
-		}
-		break;
-		case 4:
-		{
-			type = Engine::OBJECT_TYPE::HOUSE;
-		}
-		break;
-		case 5:
-		{
-			type = Engine::OBJECT_TYPE::DISTANCE_SENSOR;
-		}
-		break;
-	}
-
-
-	Vector2D pos = setObjectPosition( draw, type, house );
-
-
-	switch ( type )
+		Vector2D position;
+		Engine::OBJECT_TYPE type;
+	};
+	std::vector<Positions> positions;
+	
+	for ( int i = 0; i < 4; i++ )
 	{
-		case ( Engine::OBJECT_TYPE::TEMPERATURE_SENSOR ):
+		switch ( i + 1 )
 		{
-			world->addObject( new TemperatureSensor( pos ) );
-		}
-		break;
-		case Engine::OBJECT_TYPE::MOTION_SENSOR:
-		{
-			auto object = new MotionSensor( pos );
-			world->addObject( object );
-		}
-		break;
-		case ( Engine::OBJECT_TYPE::PERSON ):
-		{
-			auto object = new Person( pos );
-			world->addObject( object );
-		}
-		break;
-		case ( Engine::OBJECT_TYPE::HOUSE ):
-		{
-			std::cout << "Choose width and height (19 x 19 max)" << std::endl;
-
-			int width = 0;
-			int length = 0;
-
-			std::cin >> width;
-
-			std::cout << "Choose length" << std::endl;
-
-			std::cin.clear();
-			std::cin >> length;
-			if ( width < 20 && width > 0 && length < 20 && length > 0 )
+			case 1:
 			{
-				if ( house == nullptr )
-				{
-					house = new House( pos, Vector2D( width, length ) );
-					std::cout << "HOUSE PLACED" << std::endl;
-				}
-				else
-				{
-					std::cout << "HOUSE ALREADY PLACED" << std::endl;
-				}
+				type = Engine::OBJECT_TYPE::TEMPERATURE_SENSOR;
 			}
-
+			break;
+			case 2:
+			{
+				type = Engine::OBJECT_TYPE::MOTION_SENSOR;
+			}
+			break;
+			case 3:
+			{
+				type = Engine::OBJECT_TYPE::PERSON;
+			}
+			break;
+			case 4:
+			{
+				type = Engine::OBJECT_TYPE::DISTANCE_SENSOR;
+			}
+			break;
 		}
-		break;
+		Vector2D objPos = setObjectPosition( draw, type, house );
+		positions.push_back( { objPos , type } );
 	}
 
+	for ( auto pos : positions )
+	{
+		switch ( pos.type )
+		{
+			case ( Engine::OBJECT_TYPE::TEMPERATURE_SENSOR ):
+			{
+				auto object = new TemperatureSensor( pos.position );
+				world->addObject( object );
+			}
+			break;
+			case Engine::OBJECT_TYPE::MOTION_SENSOR:
+			{
+				auto object = new MotionSensor( pos.position );
+				world->addObject( object );
+			}
+			break;
+			case ( Engine::OBJECT_TYPE::PERSON ):
+			{
+				
+				Person* person = world->createPerson( pos.position );
+				world->addObject( person );
+			}
+			break;
+			case ( Engine::OBJECT_TYPE::DISTANCE_SENSOR ):
+			{
+				auto object = new DistanceSensor( pos.position );
+				world->addObject( object );
+			}
+			break;
+		}
+	}
+}
+
+void simulate(World* world, const Draw& draw)
+{
+	while ( true )
+	{
+		draw.draw( Vector2D( 255, 255 ), Engine::OBJECT_TYPE::NONE, nullptr );
+		world->runTick();
+	}
 }
 
 
@@ -148,6 +138,8 @@ int main()
 	while ( true )
 	{
 		setup( draw, &world, house );
+		simulate(&world, draw);
+		break;
 	}
 
 

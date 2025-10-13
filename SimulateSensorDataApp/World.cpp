@@ -1,5 +1,7 @@
 #include "World.h"
 #include <iostream>
+#include <windows.h>
+#include <random>
 #include "Person.h"
 #include "StoreData.h"
 #include "Vector.h"
@@ -21,11 +23,16 @@ World::~World()
 
 void World::runTick()
 {
-	for ( auto obj : _worldObjects )
-	{
-		obj->runTick(_person, _storeData);
-	}
-	_ticks++;
+		float maxTemp = 28.9f;
+		float minTemp = 17.5f;
+		_temperature = randomTemperature( minTemp, maxTemp );
+		for ( auto obj : _worldObjects )
+		{
+			obj->runTick( this, _storeData );
+		}
+		_ticks = 0;
+	_person->runTick(this, _storeData);
+	
 
 }
 
@@ -75,19 +82,17 @@ const std::vector<WorldObject*>& World::worldObjects() const
 	return _worldObjects;
 }
 
-bool World::personInRange( WorldObject* object )
-{
-	auto position = object->position();
-	auto euclideanDistance = ::euclideanDistance( _person->position(), position );
-	auto range = object->range();
 
-	return euclideanDistance <= range;
+
+void World::printData() const
+{
+	_storeData.printData();
 }
 
-void World::storeData()
+float World::randomTemperature(float min, float max) const
 {
-	/*for ( int i = 0; i < _worldObjects.size(); i++ )
-	{
-		_worldObjects[ i ]->storeData( _storeData );
-	}*/
+	std::random_device rd;
+	std::mt19937 gen( rd() );
+	std::uniform_real_distribution<float> dist( min, max );
+	return dist( gen );
 }

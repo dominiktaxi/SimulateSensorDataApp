@@ -2,7 +2,7 @@
 #include "StoreData.h"
 
 TemperatureSensor::TemperatureSensor(const Vector2D& pos) : WorldObject( pos ), _temperature(20.f), 
-_type(WorldObject::TYPE::TEMPERATURE_SENSOR), _name("temperatureSensor"){}
+_type(WorldObject::TYPE::TEMPERATURE_SENSOR), _name("temperatureSensor"), _ticks(0){}
 
 const Vector2D& TemperatureSensor::position() const
 {
@@ -19,20 +19,20 @@ WorldObject::TYPE TemperatureSensor::type() const
 	return TemperatureSensor::TYPE::TEMPERATURE_SENSOR;
 }
 
-int TemperatureSensor::range() const
+
+
+void TemperatureSensor::runTick( const World* world, StoreData& storeData )
 {
-	return -1; //useless method
+	if ( _ticks > 100 )
+	{
+		_temperature = world->temperature();
+		storeData.store( this );
+		_ticks = 0;
+	}
+	_ticks++;
 }
 
-void TemperatureSensor::runTick( Person* person, StoreData& storeData )
-{
 
-}
-
-void TemperatureSensor::storeData( StoreData& storeData) const
-{
-	storeData.store( this );
-}
 
 float TemperatureSensor::data() const
 {

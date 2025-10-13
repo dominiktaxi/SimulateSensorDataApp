@@ -24,6 +24,9 @@ public:
 	};
 	void store( const WorldObject* );
 
+	void printData() const;
+	void viewStats() const;
+
 private:
 	std::vector<Data> _temperatures;
 	std::vector<Data> _distances;
@@ -31,5 +34,7 @@ private:
 	std::vector<Vector2D> _personPositions;
 	std::chrono::time_point<std::chrono::steady_clock> _start;
 	
+
+	float average(const std::vector<Data>&) const;
 };
 

@@ -21,8 +21,7 @@ public:
 	Person* person() const;
 	void addObject( WorldObject* );
 	const std::vector<WorldObject*>& worldObjects() const;
-	bool personInRange(WorldObject*);
-	void storeData();
+	void printData() const;
 private:
 	std::vector<WorldObject*> _worldObjects;
 	Person* _person;
@@ -30,5 +29,7 @@ private:
 	float _temperature;
 	float _humidity;
 	unsigned int _ticks;
+
+	float randomTemperature(float, float) const;
 };
 

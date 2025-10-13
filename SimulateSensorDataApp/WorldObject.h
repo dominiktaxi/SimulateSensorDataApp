@@ -1,6 +1,6 @@
 #pragma once
 #include "Vector.h"
-
+#include "World.h"
 
 class Person;
 class StoreData;
@@ -12,11 +12,8 @@ public:
 	WorldObject( const Vector2D& );
 	virtual WorldObject::TYPE type() const = 0;
 	virtual const Vector2D& position() const = 0;
-	virtual void runTick( Person*, StoreData& ) = 0;
-	virtual int range() const = 0;
+	virtual void runTick( const World*, StoreData& ) = 0;
 	virtual float data() const = 0;
-	virtual void storeData( StoreData& ) const = 0;
-	bool isInRange( const WorldObject&, WorldObject::TYPE type ) const;
 	float euclideanDistance( WorldObject& other ) const;
 	
 protected:
