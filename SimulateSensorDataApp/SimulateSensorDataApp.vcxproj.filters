@@ -39,12 +39,6 @@
     <ClCompile Include="World.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="House.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="WorldObserver.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -54,10 +48,13 @@
     <ClCompile Include="DistanceSensor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StoreData.cpp">
+    <ClCompile Include="HandleData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldEvent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -83,12 +80,6 @@
     <ClInclude Include="World.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="House.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WorldObserver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -98,10 +89,13 @@
     <ClInclude Include="DistanceSensor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StoreData.h">
+    <ClInclude Include="HandleData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

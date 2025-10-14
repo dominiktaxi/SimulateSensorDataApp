@@ -3,7 +3,7 @@
 #include "World.h"
 
 class Person;
-class StoreData;
+class HandleData;
 
 class WorldObject
 {
@@ -12,7 +12,7 @@ public:
 	WorldObject( const Vector2D& );
 	virtual WorldObject::TYPE type() const = 0;
 	virtual const Vector2D& position() const = 0;
-	virtual void runTick( const World*, StoreData& ) = 0;
+	virtual void runTick( const World*, HandleData& ) = 0;
 	virtual float data() const = 0;
 	float euclideanDistance( WorldObject& other ) const;
 	

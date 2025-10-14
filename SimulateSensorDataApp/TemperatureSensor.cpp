@@ -1,5 +1,5 @@
 #include "TemperatureSensor.h"
-#include "StoreData.h"
+#include "HandleData.h"
 
 TemperatureSensor::TemperatureSensor(const Vector2D& pos) : WorldObject( pos ), _temperature(20.f), 
 _type(WorldObject::TYPE::TEMPERATURE_SENSOR), _name("temperatureSensor"), _ticks(0){}
@@ -21,12 +21,12 @@ WorldObject::TYPE TemperatureSensor::type() const
 
 
 
-void TemperatureSensor::runTick( const World* world, StoreData& storeData )
+void TemperatureSensor::runTick( const World* world, HandleData& handleData )
 {
 	if ( _ticks > 100 )
 	{
 		_temperature = world->temperature();
-		storeData.store( this );
+		handleData.store( this );
 		_ticks = 0;
 	}
 	_ticks++;

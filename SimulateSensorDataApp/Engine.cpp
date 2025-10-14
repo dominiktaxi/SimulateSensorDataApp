@@ -1,18 +1,27 @@
 #include "Engine.h"
 #include <iostream>
+#include "utils.h"
 
 Engine::Engine () : _world(), _player() {}
+
+void Engine::clear()
+{
+	_world.clear();
+	_player.person() = nullptr;
+}
 
 World* Engine::world()
 {
 	return &_world;
 }
 
+
 void Engine::spawnPerson()
 {
 	if ( _player.person() == nullptr )
 	{
 		_player.assignPerson( _world.spawnPerson( Vector2D( 20, 15 ) ) );
+		::beep( 200, 500 );
 	}
 	else
 	{

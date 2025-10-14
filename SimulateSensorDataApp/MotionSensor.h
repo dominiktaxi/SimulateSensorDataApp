@@ -6,7 +6,7 @@ public:
 	MotionSensor( const Vector2D& );
 	const Vector2D& position() const override;
 	WorldObject::TYPE type() const override;
-	void runTick(const World*, StoreData&) override;
+	void runTick(const World*, HandleData&) override;
 	float data() const override;
 private:
 	uint8_t _elementCounter;

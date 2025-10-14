@@ -11,9 +11,9 @@ public:
 	void moveUp();
 	const Vector2D& position() const override;
 	WorldObject::TYPE type() const override;
-	void runTick(const World*, StoreData&) override;
+	void runTick(const World*, HandleData&) override;
 	float data() const override;
-	void storeData( StoreData& ) const;
+	void handleData( HandleData& ) const;
 private:
 	WorldObject::TYPE _type;
 };

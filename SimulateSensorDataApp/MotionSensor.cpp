@@ -1,7 +1,7 @@
 #include "MotionSensor.h"
 #include <iostream>
 #include "utils.h"
-#include "StoreData.h"
+#include "HandleData.h"
 #include "Person.h"
 
 MotionSensor::MotionSensor(const Vector2D& pos) : WorldObject( pos ), _elementCounter(0),
@@ -18,7 +18,7 @@ WorldObject::TYPE MotionSensor::type() const
 }
 
 
-void MotionSensor::runTick( const World* world, StoreData& storeData)
+void MotionSensor::runTick( const World* world, HandleData& handleData)
 {
 	if ( isInRange( world->person() ) )
 	{
@@ -29,7 +29,7 @@ void MotionSensor::runTick( const World* world, StoreData& storeData)
 		
 		if ( detectedMovement() )
 		{
-			storeData.store( this );
+			handleData.store( this );
 		}
 	}
 }

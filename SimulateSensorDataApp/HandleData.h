@@ -6,15 +6,19 @@
 class Vector2D;
 class WorldObject;
 
-class StoreData
+class HandleData
 {
 public:
-	StoreData();
+	HandleData();
 	struct Data
 	{
 		float sensorRead;
 		double timeStamp;
 		const char* name;
+		bool operator<( const Data& other ) const
+		{
+			return sensorRead < other.sensorRead; // sort by value
+		}
 	};
 	struct DataFromMovementSensor
 	{
@@ -22,19 +26,20 @@ public:
 		double timeStamp;
 		const char* name;
 	};
+	
+	void clear();
 	void store( const WorldObject* );
 
-	void printData() const;
-	void viewStats();
+	void handleStats();
 
+	void setMaxTemperature(float);
 private:
 	std::vector<Data> _temperatures;
 	std::vector<Data> _distances;
 	std::vector<DataFromMovementSensor> _movements;
-	std::vector<Vector2D> _personPositions;
 	std::chrono::time_point<std::chrono::steady_clock> _start;
+	float _maxTemperature;
 	
-
 	float average(const std::vector<Data>&) const;
 	void sort( std::vector<Data>& );
 };

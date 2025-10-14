@@ -1,5 +1,5 @@
 #include "DistanceSensor.h"
-#include "StoreData.h"
+#include "HandleData.h"
 #include "Utils.h"
 #include "Person.h"
 #include <iostream>
@@ -21,7 +21,7 @@ const Vector2D& DistanceSensor::position() const
 
 
 
-void DistanceSensor::runTick(const World* world, StoreData& storeData)
+void DistanceSensor::runTick(const World* world, HandleData& handleData)
 {
 
 	if ( _ticks > 100 )
@@ -29,8 +29,7 @@ void DistanceSensor::runTick(const World* world, StoreData& storeData)
 		if ( isInRange( world->person() ) )
 		{
 			_distance = ::euclideanDistance( this->position(), world->person()->position() );
-			storeData.store( this );
-			::beep( 500, 500 );
+			handleData.store( this );
 		}
 		_ticks = 0;
 	}

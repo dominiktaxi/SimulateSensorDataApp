@@ -1,7 +1,7 @@
 #pragma once
 
-#include "StoreData.h"
-#include <map>
+#include "HandleData.h"
+#include "WorldEvent.h"
 #include <vector>
 class Person;
 
@@ -13,6 +13,8 @@ class World
 public:
 	World();
 	~World();
+
+	void clear();
 	
 	void runTick();
 	float temperature() const;
@@ -21,12 +23,13 @@ public:
 	Person* person() const;
 	void addObject( WorldObject* );
 	const std::vector<WorldObject*>& worldObjects() const;
-	void printData() const;
 	void viewStats();
+	void setMaxTemperature( float );
 private:
 	std::vector<WorldObject*> _worldObjects;
+	std::vector<WorldEvent> _worldEvents;
 	Person* _person;
-	StoreData _storeData;
+	HandleData _handleData;
 	float _temperature;
 	float _humidity;
 	unsigned int _ticks;

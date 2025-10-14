@@ -7,7 +7,7 @@ public:
 	const Vector2D& position() const override;
 	void sensor();
 	WorldObject::TYPE type() const override;
-	void runTick(const World*, StoreData&) override;
+	void runTick(const World*, HandleData&) override;
 	float data() const override;
 private:
 	float _temperature;

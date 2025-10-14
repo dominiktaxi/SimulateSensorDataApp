@@ -130,34 +130,32 @@
     <ClCompile Include="DistanceSensor.cpp" />
     <ClCompile Include="Draw.cpp" />
     <ClCompile Include="Engine.cpp" />
-    <ClCompile Include="House.cpp" />
     <ClCompile Include="MotionSensor.cpp" />
     <ClCompile Include="Person.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="StoreData.cpp" />
+    <ClCompile Include="HandleData.cpp" />
     <ClCompile Include="TemperatureSensor.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="Vector.cpp" />
     <ClCompile Include="World.cpp" />
+    <ClCompile Include="WorldEvent.cpp" />
     <ClCompile Include="WorldObject.cpp" />
-    <ClCompile Include="WorldObserver.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DistanceSensor.h" />
     <ClInclude Include="Draw.h" />
     <ClInclude Include="Engine.h" />
-    <ClInclude Include="House.h" />
     <ClInclude Include="MotionSensor.h" />
     <ClInclude Include="Person.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="StoreData.h" />
+    <ClInclude Include="HandleData.h" />
     <ClInclude Include="TemperatureSensor.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="World.h" />
+    <ClInclude Include="WorldEvent.h" />
     <ClInclude Include="WorldObject.h" />
-    <ClInclude Include="WorldObserver.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -7,7 +7,6 @@
 #include "Engine.h"
 #include "TemperatureSensor.h"
 #include "MotionSensor.h"
-#include "House.h"
 #include "DistanceSensor.h"
 
 //This function sets position of objects through a "game-like" experience and returns it in my custom made class Vector2D
@@ -106,6 +105,24 @@ void setup( Draw & draw, Engine* engine )
 			break;
 		}
 	}
+	while ( true )
+	{
+		float maxTemp = 0.f;
+		std::cout << "Set temperature threshold: " << std::endl;
+		std::cin >> maxTemp;
+		system( "cls" );
+		if ( std::cin.fail() )
+		{
+			std::cin.ignore();
+			std::cin.clear();
+			std::cout << "Enter a numeric value" << std::endl;
+		}
+		else
+		{
+			world->setMaxTemperature( maxTemp );
+			break;
+		}
+	}
 }
 
 
@@ -124,6 +141,7 @@ void simulate(Engine* engine, const Draw& draw)
 		draw.draw( Vector2D( 255, 255 ), Engine::OBJECT_TYPE::NONE );
 		world->runTick();
 		std::cout << "\nPress P to return" << std::endl;
+		std::cout << "Beep alarm = Temperature over threshold" << std::endl;
 		if ( _kbhit() )
 		{
 			switch ( _getch() )
@@ -142,12 +160,12 @@ void simulate(Engine* engine, const Draw& draw)
 void menu(Engine* engine, const Draw& draw)
 {
 	int choice = 0;
-	while ( choice != 3 )
+	while ( choice != 4 && choice != 3)
 	{
 		system( "cls" );
-		std::cout << "1.Simulate\n2.View stats\n3.Quit" << std::endl;
+		std::cout << "1.Simulate\n2.View stats\n3.Clear everything and setup again\n4.Quit" << std::endl;
 		std::cin >> choice;
-		if ( std::cin.fail() )
+		if ( std::cin.fail() || choice < 1 || choice > 4 )
 		{
 			std::string text = "Enter a number between 1 and 3          ";
 			for ( int i = 0; i < sizeof( text ) / sizeof( text[ 0 ] ); i++ )
@@ -165,6 +183,7 @@ void menu(Engine* engine, const Draw& draw)
 			{
 				case 1: simulate(engine, draw); break;
 				case 2: engine->world()->viewStats(); break;
+				case 3: engine->clear(); break;
 			}
 		}
 	}
@@ -172,17 +191,14 @@ void menu(Engine* engine, const Draw& draw)
 
 int main()
 {
-	
 	Engine engine;
 	World* world = engine.world();
 	Draw draw( world );
-	
-	setup( draw, &engine );
-	engine.spawnPerson();
-	while ( true )
+	while ( world->worldObjects().size() == 0 )
 	{
-		menu(&engine, draw );
-		break;
+		setup( draw, &engine );
+		engine.spawnPerson();
+		menu( &engine, draw );
 	}
 
     return 0;

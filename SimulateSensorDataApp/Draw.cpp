@@ -1,6 +1,5 @@
 #include "Draw.h"
 #include "Vector.h"
-#include "House.h"
 #include "WorldObject.h"
 #include <iostream>
 

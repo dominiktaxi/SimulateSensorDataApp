@@ -1,6 +1,6 @@
 #include <conio.h>
 #include "Person.h"
-#include "StoreData.h"
+#include "HandleData.h"
 Person::Person ( const Vector2D& pos ) : WorldObject(pos), _type(WorldObject::TYPE::PERSON) {}
 
 void Person::moveRight()
@@ -33,7 +33,7 @@ WorldObject::TYPE Person::type() const
 	return _type;
 }
 
-void Person::runTick( const World* world, StoreData& storeData )
+void Person::runTick( const World* world, HandleData& handleData )
 {
 	//move();
 }
@@ -45,7 +45,7 @@ float Person::data() const
 	return -1.f;
 }
 
-void Person::storeData( StoreData& storeData ) const
+void Person::handleData( HandleData& handleData ) const
 {
-	storeData.store( this );
+	handleData.store( this );
 }

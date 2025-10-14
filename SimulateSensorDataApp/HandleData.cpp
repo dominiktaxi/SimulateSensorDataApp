@@ -1,60 +1,58 @@
-#include "StoreData.h"
+#include "HandleData.h"
 #include "WorldObject.h"
 #include "Vector.h"
+#include "utils.h"
 
 #include <iostream>
-//#include <algorithm>
+#include <algorithm>
 #include <windows.h>
 
-StoreData::StoreData() : _start( std::chrono::steady_clock::now() )
+HandleData::HandleData() : _start( std::chrono::steady_clock::now() ), _maxTemperature( 35.f )
 {
-	
 	
 }
 
-void StoreData::store( const WorldObject* sensor )
+void HandleData::clear()
+{
+	_temperatures.clear();
+	_distances.clear();
+	_movements.clear();
+	_start = std::chrono::steady_clock::now();
+}
+
+void HandleData::store( const WorldObject* sensor )
 {
 	WorldObject::TYPE type = sensor->type();
 	if ( type == WorldObject::TYPE::TEMPERATURE_SENSOR )
 	{
 		auto now = std::chrono::steady_clock::now();
 		std::chrono::duration<double> elapsed = now - _start;
-		_temperatures.push_back( { sensor->data(), elapsed.count(), "Temperature" } );
+		if ( sensor->data() > _maxTemperature )
+		{
+			_temperatures.push_back( { sensor->data(), elapsed.count(), "Temperature over threshold: " } );
+			::beep( 800, 400 );
+		}
+		else { _temperatures.push_back( { sensor->data(), elapsed.count(), "Temperature: " } ); }
 	}
 	else if ( type == WorldObject::TYPE::DISTANCE_SENSOR )
 	{
 		std::cout << "STORED DISTANCE" << std::endl;
 		auto now = std::chrono::steady_clock::now();
 		std::chrono::duration<double> elapsed = now - _start;
-		_distances.push_back( { sensor->data(), elapsed.count(), "Distance"});
+		_distances.push_back( { sensor->data(), elapsed.count(), "Distance: "});
 	}
 	else if ( type == WorldObject::TYPE::MOTION_SENSOR )
 	{
 		bool detectedMovement = true;
 		auto now = std::chrono::steady_clock::now();
 		std::chrono::duration<double> elapsed = now - _start;
-		_movements.push_back( { detectedMovement, elapsed.count(), "Motion" } );
+		_movements.push_back( { detectedMovement, elapsed.count(), "Motion: " } );
 	}
 }
 
-void StoreData::printData() const
-{
-	for (const auto& temps : _temperatures )
-	{
-		std::cout << "Temperature: " << temps.sensorRead << " At time: " << temps.timeStamp << std::endl;
-	}
-	for (const auto& movements : _movements )
-	{
-		std::cout << "Movements detected: " << _movements.size() << " at time: " << movements.timeStamp << std::endl;
-	}
 
-	for ( const auto& distance : _distances )
-	{
-		std::cout << "Person at distance " << distance.sensorRead << " detected at time " << distance.timeStamp << std::endl;
-	}
-}
 
-void StoreData::viewStats()
+void HandleData::handleStats()
 {
 	bool viewing = true;
 	while ( viewing )
@@ -75,8 +73,6 @@ void StoreData::viewStats()
 				std::cout << text[ i ];
 				Sleep( 50 );
 			}
-			
-			
 			continue;
 		}
 		switch ( choice )
@@ -110,7 +106,7 @@ void StoreData::viewStats()
 				{
 					for ( const auto& temperature : _temperatures )
 					{
-						std::cout << "Temperature: " << temperature.sensorRead << " time: " << temperature.timeStamp;
+						std::cout << temperature.name << temperature.sensorRead << " time: " << temperature.timeStamp;
 						std::cout << " seconds since program started\n" << std::endl;
 					}
 				}
@@ -162,7 +158,7 @@ void StoreData::viewStats()
 }
 
 
-float StoreData::average(const std::vector<Data>& datas) const
+float HandleData::average(const std::vector<Data>& datas) const
 {
 	float averageTemp;
 	float temporary = 0.f;
@@ -174,7 +170,12 @@ float StoreData::average(const std::vector<Data>& datas) const
 	return averageTemp;
 }
 
-void StoreData::sort( std::vector<Data>& data )
+void HandleData::sort( std::vector<Data>& data )
 {
-	//std::sort( data.begin(), data.end() );
+	std::sort( data.begin(), data.end() );
+}
+
+void HandleData::setMaxTemperature( float x )
+{
+	_maxTemperature = x;
 }

@@ -5,7 +5,7 @@ class Player
 public:
 	Player() = default;
 	void assignPerson( Person* );
-	Person* person();
+	Person*& person();
 private:
 	Person* _person;
 };

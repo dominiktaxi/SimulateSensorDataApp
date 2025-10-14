@@ -5,7 +5,7 @@ void Player::assignPerson( Person* person )
 	_person = person;
 }
 
-Person* Player::person()
+Person*& Player::person()
 {
 	return _person;
 }

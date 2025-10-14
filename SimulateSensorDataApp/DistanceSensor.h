@@ -6,7 +6,7 @@ public:
 	DistanceSensor( const Vector2D& );
 	WorldObject::TYPE type() const override;
 	const Vector2D& position() const override;
-	void runTick( const World*, StoreData&) override;
+	void runTick( const World*, HandleData&) override;
 	float data() const override;
 private:
 	WorldObject::TYPE _type;
@@ -14,7 +14,5 @@ private:
 	float _distance;
 	bool isInRange( Person* ) const;
 	int _ticks;
-
-	void beep(int, int);
 };
 

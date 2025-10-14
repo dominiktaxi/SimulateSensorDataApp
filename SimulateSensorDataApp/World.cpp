@@ -3,11 +3,11 @@
 #include <windows.h>
 #include <random>
 #include "Person.h"
-#include "StoreData.h"
+#include "HandleData.h"
 #include "Vector.h"
 #include "Utils.h"
 
-World::World() : _temperature( 0.f ), _humidity( 0.f ), _person( nullptr ) , _ticks( 0 ), _storeData()
+World::World() : _temperature( 0.f ), _humidity( 0.f ), _person( nullptr ) , _ticks( 0 ), _handleData()
 {
 	
 }
@@ -17,21 +17,33 @@ World::~World()
 	{
 		delete _worldObjects[ i ];
 		_worldObjects[ i ] = nullptr;
-		_worldObjects.clear();
 	}
+	_worldObjects.clear();
+}
+
+void World::clear()
+{
+	for ( auto object : _worldObjects )
+	{
+		delete object;
+		object = nullptr;
+	}
+	_worldObjects.clear();
+	_person = nullptr; //person is also in _worldObjects - already deleted
+	_handleData.clear();
 }
 
 void World::runTick()
 {
-		float maxTemp = 28.9f;
+		float maxTemp = 40.f;
 		float minTemp = 17.5f;
 		_temperature = randomTemperature( minTemp, maxTemp );
 		for ( auto obj : _worldObjects )
 		{
-			obj->runTick( this, _storeData );
+			obj->runTick( this, _handleData );
 		}
 		_ticks = 0;
-	_person->runTick(this, _storeData);
+	_person->runTick(this, _handleData);
 }
 
 
@@ -82,15 +94,9 @@ const std::vector<WorldObject*>& World::worldObjects() const
 }
 
 
-
-void World::printData() const
-{
-	_storeData.printData();
-}
-
 void World::viewStats()
 {
-	_storeData.viewStats();
+	_handleData.handleStats();
 }
 
 float World::randomTemperature(float min, float max) const
@@ -99,4 +105,9 @@ float World::randomTemperature(float min, float max) const
 	std::mt19937 gen( rd() );
 	std::uniform_real_distribution<float> dist( min, max );
 	return dist( gen );
+}
+
+void World::setMaxTemperature( float x )
+{
+	_handleData.setMaxTemperature( x );
 }
