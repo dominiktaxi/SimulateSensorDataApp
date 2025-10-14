@@ -3,18 +3,24 @@
 #include "StoreData.h"
 Person::Person ( const Vector2D& pos ) : WorldObject(pos), _type(WorldObject::TYPE::PERSON) {}
 
-void Person::move()
+void Person::moveRight()
 {
-	if ( _kbhit() )
-	{
-		switch ( _getch() )
-		{
-			case 'a': _position.setX( _position.x() - 1 ); break;
-			case 'w': _position.setY( _position.y() - 1 ); break;
-			case 's': _position.setY( _position.y() + 1 ); break;
-			case 'd': _position.setX( _position.x() + 1 ); break;
-		}
-	}
+	_position.setX( _position.x() + 1 );
+}
+
+void Person::moveLeft()
+{
+	_position.setX( _position.x() - 1 );
+}
+
+void Person::moveDown()
+{
+	_position.setY( _position.y() + 1 );
+}
+
+void Person::moveUp()
+{
+	_position.setY( _position.y() - 1 );
 }
 
 const Vector2D& Person::position() const
@@ -29,7 +35,7 @@ WorldObject::TYPE Person::type() const
 
 void Person::runTick( const World* world, StoreData& storeData )
 {
-	move();
+	//move();
 }
 
 

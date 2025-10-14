@@ -1,8 +1,8 @@
 #pragma once
 
-#include <map>
-#include <chrono>
 #include <vector>
+#include <chrono>
+
 class Vector2D;
 class WorldObject;
 
@@ -25,7 +25,7 @@ public:
 	void store( const WorldObject* );
 
 	void printData() const;
-	void viewStats() const;
+	void viewStats();
 
 private:
 	std::vector<Data> _temperatures;
@@ -36,5 +36,6 @@ private:
 	
 
 	float average(const std::vector<Data>&) const;
+	void sort( std::vector<Data>& );
 };
 

@@ -7,7 +7,7 @@
 #include "Vector.h"
 #include "Utils.h"
 
-World::World() : _temperature(0.f), _humidity(0.f), _person(nullptr), _ticks(0), _storeData()
+World::World() : _temperature( 0.f ), _humidity( 0.f ), _person( nullptr ) , _ticks( 0 ), _storeData()
 {
 	
 }
@@ -32,8 +32,6 @@ void World::runTick()
 		}
 		_ticks = 0;
 	_person->runTick(this, _storeData);
-	
-
 }
 
 
@@ -50,12 +48,13 @@ float World::humidity() const
 
 
 
-Person* World::createPerson( const Vector2D& pos )
+Person* World::spawnPerson( const Vector2D& pos )
 {
 	if ( _person == nullptr )
 	{
 		auto person = new Person( pos );
 		_person = person;
+		_worldObjects.push_back( person );
 		return person;
 	}
 	else
@@ -87,6 +86,11 @@ const std::vector<WorldObject*>& World::worldObjects() const
 void World::printData() const
 {
 	_storeData.printData();
+}
+
+void World::viewStats()
+{
+	_storeData.viewStats();
 }
 
 float World::randomTemperature(float min, float max) const

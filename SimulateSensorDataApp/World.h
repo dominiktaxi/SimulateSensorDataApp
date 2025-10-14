@@ -4,7 +4,7 @@
 #include <map>
 #include <vector>
 class Person;
-class StoreData;
+
 class WorldObject;
 class Vector2D;
 
@@ -17,11 +17,12 @@ public:
 	void runTick();
 	float temperature() const;
 	float humidity() const;
-	Person* createPerson( const Vector2D& );
+	Person* spawnPerson( const Vector2D& );
 	Person* person() const;
 	void addObject( WorldObject* );
 	const std::vector<WorldObject*>& worldObjects() const;
 	void printData() const;
+	void viewStats();
 private:
 	std::vector<WorldObject*> _worldObjects;
 	Person* _person;

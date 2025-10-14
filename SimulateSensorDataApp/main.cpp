@@ -10,25 +10,24 @@
 #include "House.h"
 #include "DistanceSensor.h"
 
-
-Vector2D setObjectPosition( Draw& draw, Engine::OBJECT_TYPE type, House* house )
+//This function sets position of objects through a "game-like" experience and returns it in my custom made class Vector2D
+Vector2D setObjectPosition( Draw& draw, Engine::OBJECT_TYPE type )
 {
 	int dude = rand() % 100;
 	bool placing = true;
 	Vector2D objectPos( 0, 0 );
-	
 
 	while ( placing )
 	{
 		//if ( _kbhit() )
 		{
-			draw.draw( objectPos, type, house );
+			draw.draw( objectPos, type );
 			if ( static_cast<int>( type ) == 0 ) { std::cout << "\nPLACE TEMPERATURE SENSOR" << std::endl; }
 			if ( static_cast<int>( type ) == 1 ) { std::cout << "\nPLACE MOTION SENSOR" << std::endl; }
 			if ( static_cast<int>( type ) == 2 ) { std::cout << "\nPLACE DISTANCE SENSOR" << std::endl; }
 			if ( static_cast<int>( type ) == 3 ) { std::cout << "\nPLACE PERSON" << std::endl; }
 			
-			std::cout << "A-LEFT	D-RIGHT		W-UP	S-DOWN		SPACE-DONE" << std::endl;
+			std::cout << "A = LEFT		D = RIGHT		W = UP		S = DOWN		SPACE = PLACE" << std::endl;
 			switch ( _getch() )
 			{
 				system( "cls" );
@@ -43,12 +42,13 @@ Vector2D setObjectPosition( Draw& draw, Engine::OBJECT_TYPE type, House* house )
 		
 	}
 	return objectPos;
-	}
+}
 
-void setup( Draw & draw, World * world, House * &house )
+//this function handles all the setup that needs to be done before the whole program can start running and collecting data
+void setup( Draw & draw, Engine* engine )
 {
 	Engine::OBJECT_TYPE type = Engine::OBJECT_TYPE::NONE;
-	
+	World* world = engine->world();
 	
 	struct Positions
 	{
@@ -57,7 +57,7 @@ void setup( Draw & draw, World * world, House * &house )
 	};
 	std::vector<Positions> positions;
 	
-	for ( int i = 0; i < 4; i++ )
+	for ( int i = 0; i < 3; i++ )
 	{
 		switch ( i + 1 )
 		{
@@ -73,19 +73,15 @@ void setup( Draw & draw, World * world, House * &house )
 			break;
 			case 3:
 			{
-				type = Engine::OBJECT_TYPE::PERSON;
-			}
-			break;
-			case 4:
-			{
 				type = Engine::OBJECT_TYPE::DISTANCE_SENSOR;
 			}
 			break;
 		}
-		Vector2D objPos = setObjectPosition( draw, type, house );
+		//obtaining objectpositions and storing them in positions vector
+		Vector2D objPos = setObjectPosition( draw, type );
 		positions.push_back( { objPos , type } );
 	}
-
+	//looping throug positions vector to create new objects in world
 	for ( auto pos : positions )
 	{
 		switch ( pos.type )
@@ -102,13 +98,6 @@ void setup( Draw & draw, World * world, House * &house )
 				world->addObject( object );
 			}
 			break;
-			case ( Engine::OBJECT_TYPE::PERSON ):
-			{
-				
-				Person* person = world->createPerson( pos.position );
-				world->addObject( person );
-			}
-			break;
 			case ( Engine::OBJECT_TYPE::DISTANCE_SENSOR ):
 			{
 				auto object = new DistanceSensor( pos.position );
@@ -119,33 +108,82 @@ void setup( Draw & draw, World * world, House * &house )
 	}
 }
 
-void simulate(World* world, const Draw& draw)
+
+
+//draw.draw handles drawing the visual world
+//world-runTick() handles every sensor read, temperature changes and user input to change person position
+
+
+void simulate(Engine* engine, const Draw& draw)
 {
-	while ( true )
+	bool running = true;
+	while ( running )
 	{
-		draw.draw( Vector2D( 255, 255 ), Engine::OBJECT_TYPE::NONE, nullptr );
+		auto world = engine->world();
+		//same function as used in setting object position, but now the arguments are unnecessary
+		draw.draw( Vector2D( 255, 255 ), Engine::OBJECT_TYPE::NONE );
 		world->runTick();
+		std::cout << "\nPress P to return" << std::endl;
+		if ( _kbhit() )
+		{
+			switch ( _getch() )
+			{
+				case 'p': running = false; break;
+				case 'w': engine->handleEvent( Engine::EVENT::MOVE_UP );    break;
+				case 's': engine->handleEvent( Engine::EVENT::MOVE_DOWN );  break;
+				case 'a': engine->handleEvent( Engine::EVENT::MOVE_LEFT );	break;
+				case 'd': engine->handleEvent( Engine::EVENT::MOVE_RIGHT );	break;
+			}
+
+		}
 	}
 }
 
+void menu(Engine* engine, const Draw& draw)
+{
+	int choice = 0;
+	while ( choice != 3 )
+	{
+		system( "cls" );
+		std::cout << "1.Simulate\n2.View stats\n3.Quit" << std::endl;
+		std::cin >> choice;
+		if ( std::cin.fail() )
+		{
+			std::string text = "Enter a number between 1 and 3          ";
+			for ( int i = 0; i < sizeof( text ) / sizeof( text[ 0 ] ); i++ )
+			{
+				std::cout << text[i] << std::endl;
+				Sleep( 300 );
+				std::cin.ignore();
+				std::cin.clear();
+				continue;
+			}
+		}
+		else
+		{
+			switch ( choice )
+			{
+				case 1: simulate(engine, draw); break;
+				case 2: engine->world()->viewStats(); break;
+			}
+		}
+	}
+}
 
 int main()
 {
-	World world;
-	Draw draw( &world );
-	House* house = nullptr;
-
+	
+	Engine engine;
+	World* world = engine.world();
+	Draw draw( world );
+	
+	setup( draw, &engine );
+	engine.spawnPerson();
 	while ( true )
 	{
-		setup( draw, &world, house );
-		simulate(&world, draw);
+		menu(&engine, draw );
 		break;
 	}
-
-
-	// house->setup()
-	// world->draw()
-	// world->append(&house)
 
     return 0;
 }

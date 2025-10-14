@@ -10,7 +10,7 @@ class Draw
 {
 public:
 	Draw( World* world);
-	void draw(const Vector2D& pos, Engine::OBJECT_TYPE type, House* house) const;
+	void draw( const Vector2D& pos, Engine::OBJECT_TYPE type ) const;
 private:
 	World* _world;
 };

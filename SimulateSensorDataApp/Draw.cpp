@@ -6,10 +6,10 @@
 
 Draw::Draw(World* world) : _world(world) {}
 
-void Draw::draw(const Vector2D& pos, Engine::OBJECT_TYPE type, House* house) const
+void Draw::draw(const Vector2D& pos, Engine::OBJECT_TYPE type ) const
 {
 	bool drawEmptySpace = true;
-	int numberOfObjects = _world->worldObjects().size();
+	size_t numberOfObjects = _world->worldObjects().size();
 	std::vector<WorldObject*> worldObjects = _world->worldObjects();
 	Person* person = _world->person();
 	system( "cls" );
