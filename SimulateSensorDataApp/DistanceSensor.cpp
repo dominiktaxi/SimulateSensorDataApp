@@ -24,7 +24,7 @@ const Vector2D& DistanceSensor::position() const
 void DistanceSensor::runTick(const World* world, HandleData& handleData)
 {
 
-	if ( _ticks > 100 )
+	if ( _ticks > 20 )
 	{
 		if ( isInRange( world->person() ) )
 		{

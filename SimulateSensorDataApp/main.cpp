@@ -202,7 +202,6 @@ void fakeLoading()
 		for ( int j = 0; j < i + 1; j++ )
 		{
 			std::cout << loading[ j ];
-			
 		}
 		percentage += 2.5f;
 		std::cout << std::endl << percentage << "%" << std::endl;
