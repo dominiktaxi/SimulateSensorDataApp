@@ -1,3 +1,5 @@
+**PLEASE OPEN THIS README, IT IS NOT EASILY READABLE IF JUST VIEWED WITHOUT OPENING**
+
 **SimulateSensorData**
 A modular simulation for virtual sensors that detect movement and temperature. World interaction with a game-like experience.
 
@@ -28,6 +30,7 @@ main.cpp                     ---> contains:
                                         
 **Requirements**
 C++ 14 or newer
+Standard library only (no external dependencies)
 
 **Example Behavior**
 * The World creates a set of sensors and entities.
