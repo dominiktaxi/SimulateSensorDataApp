@@ -1,4 +1,4 @@
-**PLEASE OPEN THIS README, IT IS NOT EASILY READABLE IF JUST VIEWED WITHOUT OPENING**
+**PLEASE OPEN THIS README, IT IS NOT EASILY READABLE IF JUST VIEWED WITHOUT OPENING THEN CLICK ON CODE**
 
 **SimulateSensorData**
 A modular simulation for virtual sensors that detect movement and temperature. World interaction with a game-like experience.
