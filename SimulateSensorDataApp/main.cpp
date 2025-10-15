@@ -8,37 +8,38 @@
 #include "TemperatureSensor.h"
 #include "MotionSensor.h"
 #include "DistanceSensor.h"
+#include "Utils.h"
+#include "Globals.h"
+
+const int WIDTH = 40;
+const int HEIGHT = 30;
+const float maxTemperature = 40.f;
+const float minTemperature = 17.5f;
 
 //This function sets position of objects through a "game-like" experience and returns it in my custom made class Vector2D
 Vector2D setObjectPosition( Draw& draw, Engine::OBJECT_TYPE type )
 {
-	int dude = rand() % 100;
 	bool placing = true;
-	Vector2D objectPos( 0, 0 );
-
+	Vector2D objectPos( WIDTH / 2, HEIGHT / 2 );
 	while ( placing )
 	{
-		//if ( _kbhit() )
 		{
 			draw.draw( objectPos, type );
 			if ( static_cast<int>( type ) == 0 ) { std::cout << "\nPLACE TEMPERATURE SENSOR" << std::endl; }
 			if ( static_cast<int>( type ) == 1 ) { std::cout << "\nPLACE MOTION SENSOR" << std::endl; }
 			if ( static_cast<int>( type ) == 2 ) { std::cout << "\nPLACE DISTANCE SENSOR" << std::endl; }
-			if ( static_cast<int>( type ) == 3 ) { std::cout << "\nPLACE PERSON" << std::endl; }
-			
+
 			std::cout << "A = LEFT		D = RIGHT		W = UP		S = DOWN		SPACE = PLACE" << std::endl;
 			switch ( _getch() )
 			{
 				system( "cls" );
-				case 'a': objectPos.setX( objectPos.x() - 1 ); break;
-				case 'w': objectPos.setY( objectPos.y() - 1 ); break;
-				case 's': objectPos.setY( objectPos.y() + 1 ); break;
-				case 'd': objectPos.setX( objectPos.x() + 1 ); break;
+				case 'a': if ( objectPos.x() > 1 )  objectPos.setX( objectPos.x() - 1 ); break;
+				case 'w': if ( objectPos.y() > 1 ) objectPos.setY( objectPos.y() - 1 ); break;
+				case 's': if ( objectPos.y() < HEIGHT - 2 ) objectPos.setY( objectPos.y() + 1 ); break;
+				case 'd': if ( objectPos.x() < WIDTH - 2 ) objectPos.setX( objectPos.x() + 1 ); break;
 				case ' ': placing = false; break;
 			}
 		}
-		
-		
 	}
 	return objectPos;
 }
@@ -108,13 +109,14 @@ void setup( Draw & draw, Engine* engine )
 	while ( true )
 	{
 		float maxTemp = 0.f;
-		std::cout << "Set temperature threshold: " << std::endl;
+		std::cout << "Set temperature threshold: ";
+		std::cout << "(temperature will vary between " << minTemperature << " and " << maxTemperature << ")" << std::endl;
 		std::cin >> maxTemp;
 		system( "cls" );
 		if ( std::cin.fail() )
 		{
-			std::cin.ignore();
 			std::cin.clear();
+			std::cin.ignore();
 			std::cout << "Enter a numeric value" << std::endl;
 		}
 		else
@@ -136,12 +138,11 @@ void simulate(Engine* engine, const Draw& draw)
 	bool running = true;
 	while ( running )
 	{
-		auto world = engine->world();
 		//same function as used in setting object position, but now the arguments are unnecessary
 		draw.draw( Vector2D( 255, 255 ), Engine::OBJECT_TYPE::NONE );
-		world->runTick();
+		engine->runTick();
 		std::cout << "\nPress P to return" << std::endl;
-		std::cout << "Beep alarm = Temperature over threshold" << std::endl;
+		std::cout << "Beep alarm = Temperature over threshold\nLow pitched short beep = Temperature logged" << std::endl;
 		if ( _kbhit() )
 		{
 			switch ( _getch() )
@@ -152,7 +153,6 @@ void simulate(Engine* engine, const Draw& draw)
 				case 'a': engine->handleEvent( Engine::EVENT::MOVE_LEFT );	break;
 				case 'd': engine->handleEvent( Engine::EVENT::MOVE_RIGHT );	break;
 			}
-
 		}
 	}
 }
@@ -168,9 +168,9 @@ void menu(Engine* engine, const Draw& draw)
 		if ( std::cin.fail() || choice < 1 || choice > 4 )
 		{
 			std::string text = "Enter a number between 1 and 3          ";
-			for ( int i = 0; i < sizeof( text ) / sizeof( text[ 0 ] ); i++ )
+			for ( int i = 0; i < text.size(); i++ )
 			{
-				std::cout << text[i] << std::endl;
+				std::cout << text[ i ] << std::endl;
 				Sleep( 300 );
 				std::cin.ignore();
 				std::cin.clear();
@@ -189,12 +189,36 @@ void menu(Engine* engine, const Draw& draw)
 	}
 }
 
+void fakeLoading()
+{
+	std::cout << "LOADING\n" << std::endl;
+	std::string loading = "* * * * * * * * * * * * * * * * * * * *";
+	float percentage = 2.5f;
+	
+	for ( int i = 0; i < loading.size(); i++ )
+	{
+		int sleepTime = ::randomInt( 100, 600 );
+		system( "cls" );
+		for ( int j = 0; j < i + 1; j++ )
+		{
+			std::cout << loading[ j ];
+			
+		}
+		percentage += 2.5f;
+		std::cout << std::endl << percentage << "%" << std::endl;
+		Sleep( sleepTime );
+	}
+	Sleep( 600 );
+}
+
 int main()
 {
+	fakeLoading();
 	Engine engine;
 	World* world = engine.world();
 	Draw draw( world );
-	while ( world->worldObjects().size() == 0 )
+	
+	while ( !world->worldObjects().size() )
 	{
 		setup( draw, &engine );
 		engine.spawnPerson();

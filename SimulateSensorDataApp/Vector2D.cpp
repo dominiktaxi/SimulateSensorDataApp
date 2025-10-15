@@ -1,4 +1,5 @@
-#include "Vector.h"
+#include "Vector2D.h"
+#include "Globals.h"
 
 Vector2D::Vector2D( int x, int y ) : _x( x ), _y( y ) {}
 
@@ -30,17 +31,6 @@ int Vector2D::x() const
 }
 
 int Vector2D::y() const
-{
-	return _y;
-}
-
-//Return same variables as in x() and y() but with different function name so it is more clear in House class
-int Vector2D::width() const
-{
-	return _x;
-}
-
-int Vector2D::length() const
 {
 	return _y;
 }

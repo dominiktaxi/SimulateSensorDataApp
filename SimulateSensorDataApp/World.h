@@ -1,7 +1,6 @@
 #pragma once
 
 #include "HandleData.h"
-#include "WorldEvent.h"
 #include <vector>
 class Person;
 
@@ -27,13 +26,10 @@ public:
 	void setMaxTemperature( float );
 private:
 	std::vector<WorldObject*> _worldObjects;
-	std::vector<WorldEvent> _worldEvents;
 	Person* _person;
 	HandleData _handleData;
 	float _temperature;
 	float _humidity;
 	unsigned int _ticks;
-
-	float randomTemperature(float, float) const;
 };
 

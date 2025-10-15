@@ -7,6 +7,7 @@ public:
 	Engine();
 	enum class OBJECT_TYPE { TEMPERATURE_SENSOR, MOTION_SENSOR, DISTANCE_SENSOR, PERSON, NONE, HOUSE};
 	enum class EVENT { MOVE_LEFT, MOVE_RIGHT, MOVE_UP, MOVE_DOWN, RETURN };
+	void runTick();
 	void clear();
 	World* world();
 	void spawnPerson();

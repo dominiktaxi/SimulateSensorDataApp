@@ -1,6 +1,6 @@
 #include "HandleData.h"
 #include "WorldObject.h"
-#include "Vector.h"
+#include "Vector2D.h"
 #include "utils.h"
 
 #include <iostream>
@@ -30,9 +30,9 @@ void HandleData::store( const WorldObject* sensor )
 		if ( sensor->data() > _maxTemperature )
 		{
 			_temperatures.push_back( { sensor->data(), elapsed.count(), "Temperature over threshold: " } );
-			::beep( 800, 400 );
+			::beep( 800, 800 );
 		}
-		else { _temperatures.push_back( { sensor->data(), elapsed.count(), "Temperature: " } ); }
+		else { ::beep( 200, 400 ); _temperatures.push_back( { sensor->data(), elapsed.count(), "Temperature: " } ); }
 	}
 	else if ( type == WorldObject::TYPE::DISTANCE_SENSOR )
 	{
@@ -104,11 +104,14 @@ void HandleData::handleStats()
 			{
 				if ( _temperatures.size() > 0 )
 				{
+					int temperatureOverThreshold = 0;
 					for ( const auto& temperature : _temperatures )
 					{
-						std::cout << temperature.name << temperature.sensorRead << " time: " << temperature.timeStamp;
+						if ( temperature.name == "Temperature over threshold: " ) { temperatureOverThreshold++; }
+						std::cout << temperature.name << temperature.sensorRead << "°C, Time: " << temperature.timeStamp;
 						std::cout << " seconds since program started\n" << std::endl;
 					}
+					std::cout << "Temperature reached " << temperatureOverThreshold << " times over the threshold\n" << std::endl;
 				}
 				else
 				{

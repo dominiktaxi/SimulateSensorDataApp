@@ -4,7 +4,7 @@
 #include <random>
 #include "Person.h"
 #include "HandleData.h"
-#include "Vector.h"
+#include "Vector2D.h"
 #include "Utils.h"
 
 World::World() : _temperature( 0.f ), _humidity( 0.f ), _person( nullptr ) , _ticks( 0 ), _handleData()
@@ -37,7 +37,7 @@ void World::runTick()
 {
 		float maxTemp = 40.f;
 		float minTemp = 17.5f;
-		_temperature = randomTemperature( minTemp, maxTemp );
+		_temperature = ::randomFloat( minTemp, maxTemp );
 		for ( auto obj : _worldObjects )
 		{
 			obj->runTick( this, _handleData );
@@ -99,13 +99,6 @@ void World::viewStats()
 	_handleData.handleStats();
 }
 
-float World::randomTemperature(float min, float max) const
-{
-	std::random_device rd;
-	std::mt19937 gen( rd() );
-	std::uniform_real_distribution<float> dist( min, max );
-	return dist( gen );
-}
 
 void World::setMaxTemperature( float x )
 {

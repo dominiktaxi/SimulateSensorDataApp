@@ -11,8 +11,6 @@ public:
 	bool operator!=( const Vector2D& other ) const;
 	int x() const;
 	int y() const;
-	int width() const;
-	int length() const;
 	void setX(int x);
 	void setY(int y);
 private:

@@ -17,7 +17,7 @@ public:
 		const char* name;
 		bool operator<( const Data& other ) const
 		{
-			return sensorRead < other.sensorRead; // sort by value
+			return sensorRead < other.sensorRead;
 		}
 	};
 	struct DataFromMovementSensor

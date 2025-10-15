@@ -4,6 +4,11 @@
 
 Engine::Engine () : _world(), _player() {}
 
+void Engine::runTick()
+{
+	_world.runTick();
+}
+
 void Engine::clear()
 {
 	_world.clear();
@@ -20,8 +25,8 @@ void Engine::spawnPerson()
 {
 	if ( _player.person() == nullptr )
 	{
-		_player.assignPerson( _world.spawnPerson( Vector2D( 20, 15 ) ) );
-		::beep( 200, 500 );
+		Person* person = _world.spawnPerson( Vector2D( 20, 15 ) );
+		_player.assignPerson( person );
 	}
 	else
 	{

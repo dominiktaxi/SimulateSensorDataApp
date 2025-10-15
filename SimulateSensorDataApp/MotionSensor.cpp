@@ -34,9 +34,6 @@ void MotionSensor::runTick( const World* world, HandleData& handleData)
 	}
 }
 
-
-
-
 float MotionSensor::data() const
 {
 	return -1.f;
@@ -46,7 +43,6 @@ bool MotionSensor::detectedMovement()
 {
 	return _positions[ 0 ] != _positions[ 1 ];
 }
-
 
 bool MotionSensor::isInRange( Person* person )
 {

@@ -1,6 +1,6 @@
 #include "Draw.h"
-#include "Vector.h"
 #include "WorldObject.h"
+#include "Globals.h"
 #include <iostream>
 
 Draw::Draw(World* world) : _world(world) {}
@@ -12,10 +12,10 @@ void Draw::draw(const Vector2D& pos, Engine::OBJECT_TYPE type ) const
 	std::vector<WorldObject*> worldObjects = _world->worldObjects();
 	Person* person = _world->person();
 	system( "cls" );
-	for ( int y = 0; y < 30; y++ )
+	for ( int y = 0; y < HEIGHT; y++ )
 	{
 		std::cout << std::endl;
-		for ( int x = 0; x < 40; x++ )
+		for ( int x = 0; x < WIDTH; x++ )
 		{
 			for ( int i = 0; i < numberOfObjects; i++ )
 			{
