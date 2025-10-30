@@ -1,0 +1,6 @@
+20.1449,Thu Oct 30 14:38:29 2025,Temperature: 
+20.4548,Thu Oct 30 14:38:22 2025,Temperature: 
+21.0775,Thu Oct 30 14:38:33 2025,Temperature: 
+25.2359,Thu Oct 30 14:38:25 2025,Temperature: 
+25.7651,Thu Oct 30 14:38:37 2025,Temperature: 
+30.49,Thu Oct 30 14:38:41 2025,Temperature over threshold: 

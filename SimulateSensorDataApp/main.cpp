@@ -57,6 +57,8 @@ void setup( Draw & draw, Engine* engine )
 	};
 	std::vector<Positions> positions;
 	
+	//Carl Johan tips: använd en array med object types istället
+	//std::array<Engine::OBJECT_TYPE, 3> sensorTypes = { type, type, type}
 	for ( int i = 0; i < 3; i++ )
 	{
 		switch ( i + 1 )
@@ -116,7 +118,7 @@ void setup( Draw & draw, Engine* engine )
 		if ( std::cin.fail() )
 		{
 			std::cin.clear();
-			std::cin.ignore();
+			std::cin.ignore(); // behöver en limit
 			std::cout << "Enter a numeric value" << std::endl;
 		}
 		else
@@ -142,7 +144,7 @@ void simulate(Engine* engine, const Draw& draw)
 		draw.draw( Vector2D( 255, 255 ), Engine::OBJECT_TYPE::NONE );
 		engine->runTick();
 		std::cout << "\nPress P to return" << std::endl;
-		std::cout << "Beep alarm = Temperature over threshold\nLow pitched short beep = Temperature logged" << std::endl;
+		std::cout << "High pitch, longer beep = Temperature over threshold\nLow pitched short beep = Temperature logged" << std::endl;
 		if ( _kbhit() )
 		{
 			switch ( _getch() )
@@ -216,6 +218,12 @@ int main()
 	Engine engine;
 	World* world = engine.world();
 	Draw draw( world );
+
+	if ( !engine.loadFromHDD() )
+	{
+		std::cout << "No data stored from previous readings" << std::endl;
+		Sleep( 5000 );
+	}
 	
 	while ( !world->worldObjects().size() )
 	{
@@ -224,6 +232,11 @@ int main()
 		menu( &engine, draw );
 	}
 
+	if ( !engine.storeToHDD() )
+	{
+		std::cerr << "Data could not be stored" << std::endl;
+		return 1;
+	}
     return 0;
 }
 

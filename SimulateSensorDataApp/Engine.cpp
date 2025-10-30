@@ -60,3 +60,13 @@ void Engine::handleEvent( const EVENT& event )
 		break;
 	}
 }
+
+bool Engine::storeToHDD()
+{
+	return _world.storeToHDD();
+}
+
+bool Engine::loadFromHDD()
+{
+	return _world.loadFromHDD();
+}

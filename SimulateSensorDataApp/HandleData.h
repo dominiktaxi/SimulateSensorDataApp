@@ -1,7 +1,8 @@
 #pragma once
 
 #include <vector>
-#include <chrono>
+#include <chrono>§
+#include <string>
 
 class Vector2D;
 class WorldObject;
@@ -10,12 +11,12 @@ class HandleData
 {
 public:
 	HandleData();
-	struct Data
+	struct SensorData
 	{
 		float sensorRead;
-		double timeStamp;
-		const char* name;
-		bool operator<( const Data& other ) const
+		std::string timeStamp;
+		std::string name;
+		bool operator<( const SensorData& other ) const
 		{
 			return sensorRead < other.sensorRead;
 		}
@@ -23,8 +24,8 @@ public:
 	struct DataFromMovementSensor
 	{
 		bool detectedMovement;
-		double timeStamp;
-		const char* name;
+		std::string timeStamp;
+		std::string name;
 	};
 	
 	void clear();
@@ -33,14 +34,14 @@ public:
 	void handleStats();
 
 	void setMaxTemperature(float);
+	bool storeToHDD();
+	bool loadFromHDD();
 private:
-	std::vector<Data> _temperatures;
-	std::vector<Data> _distances;
+	std::vector<SensorData> _temperatures;
+	std::vector<SensorData> _distances;
 	std::vector<DataFromMovementSensor> _movements;
-	std::chrono::time_point<std::chrono::steady_clock> _start;
 	float _maxTemperature;
-	
-	float average(const std::vector<Data>&) const;
-	void sort( std::vector<Data>& );
+	float average(const std::vector<SensorData>&) const;
+	void sort( std::vector<SensorData>& );
 };
 

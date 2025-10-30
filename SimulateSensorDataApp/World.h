@@ -24,6 +24,8 @@ public:
 	const std::vector<WorldObject*>& worldObjects() const;
 	void viewStats();
 	void setMaxTemperature( float );
+	bool storeToHDD();
+	bool loadFromHDD();
 private:
 	std::vector<WorldObject*> _worldObjects;
 	Person* _person;

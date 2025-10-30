@@ -12,6 +12,8 @@ public:
 	World* world();
 	void spawnPerson();
 	void handleEvent(const EVENT& );
+	bool storeToHDD();
+	bool loadFromHDD();
 private:
 	World _world;
 	Player _player;

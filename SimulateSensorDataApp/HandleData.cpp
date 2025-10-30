@@ -3,11 +3,13 @@
 #include "Vector2D.h"
 #include "utils.h"
 
+#include <fstream>
 #include <iostream>
 #include <algorithm>
 #include <windows.h>
+#include <sstream>
 
-HandleData::HandleData() : _start( std::chrono::steady_clock::now() ), _maxTemperature( 35.f )
+HandleData::HandleData() :  _maxTemperature( 35.f )
 {
 	
 }
@@ -17,7 +19,9 @@ void HandleData::clear()
 	_temperatures.clear();
 	_distances.clear();
 	_movements.clear();
-	_start = std::chrono::steady_clock::now();
+	std::ofstream( "sensorData/temperatures.txt", std::ios::trunc );
+	std::ofstream( "sensorData/distances.txt", std::ios::trunc );
+	std::ofstream( "sensorData/movements.txt", std::ios::trunc );
 }
 
 void HandleData::store( const WorldObject* sensor )
@@ -25,28 +29,21 @@ void HandleData::store( const WorldObject* sensor )
 	WorldObject::TYPE type = sensor->type();
 	if ( type == WorldObject::TYPE::TEMPERATURE_SENSOR )
 	{
-		auto now = std::chrono::steady_clock::now();
-		std::chrono::duration<double> elapsed = now - _start;
 		if ( sensor->data() > _maxTemperature )
 		{
-			_temperatures.push_back( { sensor->data(), elapsed.count(), "Temperature over threshold: " } );
+			_temperatures.push_back( { sensor->data(), ::localTime(), "Temperature over threshold: "});
 			::beep( 800, 800 );
 		}
-		else { ::beep( 200, 400 ); _temperatures.push_back( { sensor->data(), elapsed.count(), "Temperature: " } ); }
+		else { ::beep( 200, 400 ); _temperatures.push_back( { sensor->data(), ::localTime(), "Temperature: "}); }
 	}
 	else if ( type == WorldObject::TYPE::DISTANCE_SENSOR )
 	{
-		std::cout << "STORED DISTANCE" << std::endl;
-		auto now = std::chrono::steady_clock::now();
-		std::chrono::duration<double> elapsed = now - _start;
-		_distances.push_back( { sensor->data(), elapsed.count(), "Distance: "});
+		_distances.push_back( { sensor->data(), ::localTime(), "Distance: "});
 	}
 	else if ( type == WorldObject::TYPE::MOTION_SENSOR )
 	{
 		bool detectedMovement = true;
-		auto now = std::chrono::steady_clock::now();
-		std::chrono::duration<double> elapsed = now - _start;
-		_movements.push_back( { detectedMovement, elapsed.count(), "Motion: " } );
+		_movements.push_back( { detectedMovement, ::localTime(), "Motion: "});
 	}
 }
 
@@ -108,8 +105,7 @@ void HandleData::handleStats()
 					for ( const auto& temperature : _temperatures )
 					{
 						if ( temperature.name == "Temperature over threshold: " ) { temperatureOverThreshold++; }
-						std::cout << temperature.name << temperature.sensorRead << "°C, Time: " << temperature.timeStamp;
-						std::cout << " seconds since program started\n" << std::endl;
+						std::cout << temperature.name << temperature.sensorRead << "°C, Time: " << temperature.timeStamp << "\n";
 					}
 					std::cout << "Temperature reached " << temperatureOverThreshold << " times over the threshold\n" << std::endl;
 				}
@@ -125,7 +121,7 @@ void HandleData::handleStats()
 				{
 					for ( const auto& distance : _distances )
 					{
-						std::cout << "Distance: " << distance.sensorRead << " time: " << distance.timeStamp << " seconds since program started" << std::endl;
+						std::cout << "Distance: " << distance.sensorRead << " time: " << distance.timeStamp << std::endl;
 					}
 				}
 				else { std::cout << "Person not detected" << std::endl; }
@@ -161,19 +157,23 @@ void HandleData::handleStats()
 }
 
 
-float HandleData::average(const std::vector<Data>& datas) const
+float HandleData::average(const std::vector<SensorData>& datas) const
 {
-	float averageTemp;
+	float averageTemp = 0.f;
 	float temporary = 0.f;
 	for ( const auto& data : datas )
 	{
 		temporary += data.sensorRead;
 	}
-	averageTemp = temporary / datas.size();
+	if ( datas.size() > 0 )
+	{
+		averageTemp = temporary / datas.size();
+	}
 	return averageTemp;
+
 }
 
-void HandleData::sort( std::vector<Data>& data )
+void HandleData::sort( std::vector<SensorData>& data )
 {
 	std::sort( data.begin(), data.end() );
 }
@@ -181,4 +181,91 @@ void HandleData::sort( std::vector<Data>& data )
 void HandleData::setMaxTemperature( float x )
 {
 	_maxTemperature = x;
+}
+
+bool HandleData::storeToHDD()
+{
+	bool success = true;
+	std::ofstream temperatures( "sensorData/temperatures.txt", std::ios::app );
+	std::ofstream distances("sensorData/distances.txt", std::ios::app);
+	std::ofstream movements("sensorData/movements.txt", std::ios::app);
+	if ( !temperatures || !distances || !movements )
+	{
+		success = false;
+		return success;
+	}
+	for ( const auto& temperature : _temperatures )
+	{
+		temperatures << temperature.sensorRead << "," << temperature.timeStamp << "," << temperature.name << "\n";
+	}
+	for ( const auto& distance : _distances )
+	{
+		distances << distance.sensorRead << "," << distance.timeStamp << "," << distance.name << "\n";
+	}
+	for ( const auto& movement : _movements )
+	{
+		movements << movement.detectedMovement << "," << movement.timeStamp << "," << movement.name << "\n";
+	}
+	temperatures.close();
+	distances.close();
+	movements.close();
+	return success;
+}
+
+bool HandleData::loadFromHDD()
+{
+	bool success = true;
+	std::ifstream temperatures( "sensorData/temperatures.txt" );
+	std::string line;
+	while ( getline( temperatures, line, '\n') )
+	{
+		std::stringstream ss( line );
+		std::string sensorRead, timeStamp, name;
+		getline( ss, sensorRead, ',' );
+		getline( ss, timeStamp, ',' );
+		getline( ss, name, ',' );
+
+		SensorData data;
+		data.name = name;
+		data.timeStamp = timeStamp;
+		data.sensorRead = std::stof( sensorRead );
+		
+		//ss >> data.sensorRead;
+		_temperatures.push_back( data );
+	}
+	temperatures.close();
+	std::ifstream distances( "sensorData/distances.txt" );
+
+	while ( getline( distances, line, '\n' ) )
+	{
+		std::stringstream ss( line );
+		std::string sensorRead, timeStamp, name;
+		getline( ss, sensorRead, ',' );
+		getline( ss, timeStamp, ',' );
+		getline( ss, name, ',' );
+		
+		SensorData data;
+		data.sensorRead = std::stof( sensorRead );
+		data.timeStamp = timeStamp;
+		data.name = name;
+		_distances.push_back( data );
+	}
+	distances.close();
+	std::ifstream movements( "sensorData/movements.txt" );
+
+	while ( getline( movements, line, '\n') )
+	{
+		std::stringstream ss( line );
+		std::string detectedMovement, timeStamp, name;
+		getline( ss, detectedMovement, ',' );
+		getline( ss, timeStamp, ',' );
+		getline( ss, name, ',' );
+		DataFromMovementSensor data;
+		data.detectedMovement = ::stringToBoolean( detectedMovement );
+		data.timeStamp = timeStamp;
+		data.name = name;
+		_movements.push_back(data);
+	}
+	movements.close();
+	return success;
 }

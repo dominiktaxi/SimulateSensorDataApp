@@ -104,3 +104,13 @@ void World::setMaxTemperature( float x )
 {
 	_handleData.setMaxTemperature( x );
 }
+
+bool World::storeToHDD()
+{
+	return _handleData.storeToHDD();
+}
+
+bool World::loadFromHDD()
+{
+	return _handleData.loadFromHDD();
+}
